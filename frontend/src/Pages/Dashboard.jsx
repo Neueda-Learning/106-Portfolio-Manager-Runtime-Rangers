@@ -2,6 +2,9 @@ import React from "react";
 import Header from "../components/layout/Header";
 import Navbar from "../components/layout/Navbar";
 import SummaryCard from "../components/dashboard/SummaryCard";
+import PortfolioAllocation from "../components/dashboard/PortfolioAllocation";
+import SectorAllocation from "../components/dashboard/SectorAllocation";
+import HoldingsTable from "../components/dashboard/HoldingTable";
 
 const Dashboard = () => {
   return (
@@ -47,7 +50,14 @@ const Dashboard = () => {
             change="+3%"
             color="text-green-500"
           />
-        </div>
+
+        
+          </div>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8">
+            <PortfolioAllocation />
+            <SectorAllocation />
+            </div>
+            <HoldingsTable />
       </div>
     </div>
   );
