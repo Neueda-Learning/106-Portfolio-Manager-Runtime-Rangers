@@ -23,6 +23,7 @@ public class MarketRepository {
     }
 
     // GET /api/market/{symbol} -> Stock Details Card
+
     public Optional<Market> getMarketBySymbol(String symbol) {
         String sql = "SELECT * FROM market WHERE symbol = ?";
         List<Market> results = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Market.class), symbol);
