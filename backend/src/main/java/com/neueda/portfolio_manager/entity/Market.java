@@ -7,17 +7,19 @@ public class Market {
     private String exchange;
     private String  sector;
     private double currentPrice;
+    private double changePercent;//% change used for gainers/losers
 
     Market() {
     }
 
-    public Market(int id, String symbol, String companyName, String exchange, String sector, double currentPrice) {
+    public Market(int id, String symbol, String companyName, String exchange, String sector, double currentPrice, double changePercent) {
         this.id = id;
         this.symbol = symbol;
         this.companyName = companyName;
         this.exchange = exchange;
         this.sector = sector;
         this.currentPrice = currentPrice;
+        this.changePercent = changePercent;
     }
 
     public int getId() {
@@ -66,6 +68,14 @@ public class Market {
 
     public void setCurrentPrice(double currentPrice) {
         this.currentPrice = currentPrice;
+    }
+
+    public double getChangePercent() {
+        return changePercent;
+    }
+
+    public void setChangePercent(double changePercent) {
+        this.changePercent = changePercent;
     }
 }
 

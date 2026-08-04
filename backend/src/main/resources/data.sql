@@ -1,30 +1,34 @@
 INSERT IGNORE INTO market
-(symbol, company_name, exchange, sector, current_price)
+(symbol, company_name, exchange, sector, current_price, change_percent)
 VALUES
 
 ('AAPL',
  'Apple Inc',
  'NASDAQ',
  'Technology',
- 220.50),
+ 220.50,
+ 1.25),
 
 ('TSLA',
  'Tesla Inc',
  'NASDAQ',
  'Automotive',
- 350.20),
+ 350.20,
+ -2.35),
 
 ('MSFT',
  'Microsoft Corporation',
  'NASDAQ',
  'Technology',
- 420.75),
+ 420.75,
+ 0.80),
 
 ('AMZN',
  'Amazon Inc',
  'NASDAQ',
  'E-Commerce',
- 185.30);
+ 185.30,
+ -0.55);
 
  INSERT IGNORE INTO holding
  (
