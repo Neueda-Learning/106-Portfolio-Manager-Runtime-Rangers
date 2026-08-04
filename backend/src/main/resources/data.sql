@@ -1,3 +1,6 @@
+USE portfolio_db;
+
+
 INSERT IGNORE INTO market
 (symbol, company_name, exchange, sector, current_price, change_percent)
 VALUES
@@ -30,29 +33,29 @@ VALUES
  185.30,
  -0.55);
 
- INSERT IGNORE INTO holding
- (
+
+
+INSERT IGNORE INTO holding
+(
  market_id,
  quantity,
  purchase_price,
  purchase_date
- )
+)
 
- VALUES
+VALUES
 
- (1,
+(1,
  10,
  180.00,
  '2026-01-15'),
 
-
- (2,
+(2,
  5,
  300.00,
  '2026-02-20'),
 
-
- (3,
+(3,
  8,
  390.50,
  '2026-03-10');
