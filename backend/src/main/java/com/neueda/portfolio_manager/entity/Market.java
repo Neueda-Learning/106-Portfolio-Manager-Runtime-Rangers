@@ -78,3 +78,4 @@ public class Market {
         this.changePercent = changePercent;
     }
 }
+
