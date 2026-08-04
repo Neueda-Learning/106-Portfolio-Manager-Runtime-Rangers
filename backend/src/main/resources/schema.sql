@@ -10,7 +10,9 @@ CREATE TABLE IF NOT EXISTS market (
 
     sector VARCHAR(50),
 
-    current_price DECIMAL(10,2)
+    current_price DECIMAL(10,2),
+
+    change_percent DECIMAL(6,2) DEFAULT 0
 
 );
 
