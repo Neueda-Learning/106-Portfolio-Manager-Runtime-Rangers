@@ -2,11 +2,13 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { getMarketStocks } from "../../api/marketApi";
-import { 
+import {
   buyStock,
   getHoldings,
-  updateHolding
+  updateHolding,
+  deleteHolding
 } from "../../api/holdingApi";
+import toast from "react-hot-toast";
 
 const MarketTable = ({search}) => {
     const [marketData, setMarketData] = useState([]);
@@ -68,10 +70,9 @@ try{
     );
 
 
-    alert(
-      `${stock.symbol} quantity increased`
-    );
-
+    toast.success(
+  `${stock.symbol} quantity increased successfully`
+);
 
   }
 
@@ -82,6 +83,7 @@ try{
 
 
     const holding = {
+      id: 1,
 
       marketId: stock.id,
 
@@ -101,9 +103,9 @@ try{
     await buyStock(holding);
 
 
-    alert(
-      `${stock.symbol} bought successfully`
-    );
+  toast.success(
+  `${stock.symbol} bought successfully`
+);
 
   }
 
@@ -118,14 +120,113 @@ try{
 }
 
 catch(error){
+toast.error(
+  "Buy failed. Please try again."
+);
 
- console.error(
-   "Buy failed:",
-   error.response?.data || error
- );
-
+console.error(
+  error
+);
 }
 
+
+};
+const handleSell = async(stock)=>{
+
+  try{
+
+
+    const response = await getHoldings();
+
+    const holdings = response.data;
+
+
+    const existingStock = holdings.find(
+      item => item.marketId === stock.id
+    );
+
+
+    
+    if(!existingStock){
+
+      toast.error(
+  `You don't own ${stock.symbol}`
+);
+
+      return;
+    }
+
+
+
+    const remainingQuantity =
+      existingStock.quantity - 1;
+
+
+
+    
+    if(remainingQuantity === 0){
+
+
+      await deleteHolding(
+        existingStock.holdingId
+      );
+
+
+    }
+
+    
+    else{
+
+
+      const updatedHolding = {
+
+        id: existingStock.holdingId,
+
+        marketId: existingStock.marketId,
+
+        quantity: remainingQuantity,
+
+        purchasePrice:
+          existingStock.purchasePrice,
+
+        purchaseDate:
+          existingStock.purchaseDate
+
+      };
+
+
+      await updateHolding(
+        existingStock.holdingId,
+        updatedHolding
+      );
+
+
+    }
+
+
+
+    window.dispatchEvent(
+      new Event("portfolioUpdated")
+    );
+
+
+  toast.success(
+ `${stock.symbol} sold successfully`
+);
+
+
+  }
+  catch(error){
+ toast.error(
+    "Sell failed. Please try again."
+  );
+
+  console.error(
+    "Sell failed:",
+    error
+  );
+
+  }
 
 };
 
@@ -215,20 +316,26 @@ catch(error){
  Buy
 </button>
 
-                  <button className="
-                    bg-red-500/10
-                    border border-red-500/30
-                    text-red-400
-                    hover:bg-red-500
-                    hover:text-white
-                    px-4 py-2
-                    rounded-xl
-                    text-sm
-                    font-medium
-                    transition
-                    ">
-                    Sell
-                  </button>
+                  <button
+
+onClick={()=>handleSell(stock)}
+
+className="
+bg-red-500/10
+border border-red-500/30
+text-red-400
+hover:bg-red-500
+hover:text-white
+px-4 py-2
+rounded-xl
+text-sm
+font-medium
+transition
+"
+
+>
+ Sell
+</button>
 
                 </div>
               </td>
