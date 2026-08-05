@@ -1,6 +1,48 @@
+import { useEffect, useState } from "react";
+import axios from "axios";
+
 const TopMovers = () => {
+
+  const [gainers, setGainers] = useState([]);
+  const [losers, setLosers] = useState([]);
+
+  const topGainers = gainers.slice(0, 3);
+const topLosers = losers.slice(0, 2);
+
+
+  useEffect(() => {
+
+    axios
+      .get("http://localhost:8080/api/market/gainers")
+      .then((response) => {
+        console.log("Gainers:", response.data);
+        setGainers(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching gainers:", error);
+      });
+
+
+    axios
+      .get("http://localhost:8080/api/market/losers")
+      .then((response) => {
+        console.log("Losers:", response.data);
+        setLosers(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching losers:", error);
+      });
+
+
+  }, []);
+
+
+
   return (
     <div className="grid grid-cols-2 gap-6">
+
+
+      {/* Top Gainers */}
 
       <div className="bg-[#1D1826] border border-[#32293F] rounded-2xl p-6">
 
@@ -8,11 +50,29 @@ const TopMovers = () => {
           Top Gainers
         </h2>
 
-        <p>NVDA +4.5%</p>
-        <p>AAPL +2.4%</p>
-        <p>MSFT +0.8%</p>
+
+        {topGainers.map((stock)=>(
+          <div
+            key={stock.id}
+            className="flex justify-between py-2"
+          >
+
+            <span className="text-white">
+              {stock.symbol}
+            </span>
+
+            <span className="text-green-400">
+              +{stock.changePercent}%
+            </span>
+
+          </div>
+        ))}
 
       </div>
+
+
+
+      {/* Top Losers */}
 
       <div className="bg-[#1D1826] border border-[#32293F] rounded-2xl p-6">
 
@@ -20,11 +80,26 @@ const TopMovers = () => {
           Top Losers
         </h2>
 
-        <p>TSLA -1.3%</p>
-        <p>INTC -1.0%</p>
-        <p>META -0.7%</p>
+
+        {topLosers.map((stock)=>(
+          <div
+            key={stock.id}
+            className="flex justify-between py-2"
+          >
+
+            <span className="text-white">
+              {stock.symbol}
+            </span>
+
+            <span className="text-red-400">
+              {stock.changePercent}%
+            </span>
+
+          </div>
+        ))}
 
       </div>
+
 
     </div>
   );
