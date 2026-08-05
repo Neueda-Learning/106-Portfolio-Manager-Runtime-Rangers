@@ -31,6 +31,13 @@ public class HoldingService {
     }
 
     public Holding createHolding(Holding holding) {
+
+        if (holding.getQuantity() <= 0) {
+            throw new IllegalArgumentException(
+                    "Quantity must be greater than zero"
+            );
+        }
+
         return holdingRepository.save(holding);
     }
 
@@ -40,7 +47,15 @@ public class HoldingService {
     }
 
     public boolean deleteHolding(int id) {
-        return holdingRepository.deleteById(id);
+
+        boolean deleted = holdingRepository.deleteById(id);
+
+        if (!deleted) {
+            throw new IllegalArgumentException(
+                    "Holding not found with id: " + id
+            );
+        }
+        return deleted;
     }
 
     public List<HoldingAllocation> getPortfolioAllocation() {

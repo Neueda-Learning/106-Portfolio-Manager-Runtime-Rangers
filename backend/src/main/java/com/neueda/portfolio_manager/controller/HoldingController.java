@@ -67,10 +67,9 @@ public class HoldingController {
     // DELETE /api/holdings/{id}
     @DeleteMapping("/holdings/{id}")
     public ResponseEntity<Void> deleteHolding(@PathVariable int id) {
-        boolean deleted = holdingService.deleteHolding(id);
-        if (!deleted) {
-            return ResponseEntity.notFound().build();
-        }
+
+        holdingService.deleteHolding(id);
+
         return ResponseEntity.noContent().build();
     }
 
