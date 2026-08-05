@@ -45,6 +45,10 @@ public class HoldingService {
         holding.setId(id);
         return holdingRepository.update(holding);
     }
+    public boolean updateByMarketId(int marketId, Holding holding) {
+        holding.setMarketId(marketId);
+        return holdingRepository.updateByMarketId(holding);
+    }
 
     public boolean deleteHolding(int id) {
 
