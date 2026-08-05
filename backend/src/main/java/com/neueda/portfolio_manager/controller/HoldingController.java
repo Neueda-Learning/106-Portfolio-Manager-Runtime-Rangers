@@ -104,6 +104,16 @@ public class HoldingController {
         return ResponseEntity.noContent().build();
     }
 
+    @PutMapping("/holding/market/{marketId}")
+    public ResponseEntity<Void> updateByMarketId(@PathVariable int marketId, @RequestBody Holding holding) {
+        boolean updated = holdingService.updateByMarketId(marketId, holding);
+        if (!updated) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.noContent().build();
+    }
+
+
     @Operation(
             summary = "Delete a holding",
             description = "Deletes a holding using its ID."
