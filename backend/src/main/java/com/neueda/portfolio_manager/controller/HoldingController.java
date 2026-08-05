@@ -64,7 +64,7 @@ public class HoldingController {
             @ApiResponse(responseCode = "201", description = "Holding created successfully"),
             @ApiResponse(responseCode = "400", description = "Invalid request")
     })
-    }
+
 
     // POST /api/holdings
     @PostMapping("/holdings")
@@ -90,7 +90,7 @@ public class HoldingController {
             @ApiResponse(responseCode = "204", description = "Holding deleted successfully"),
             @ApiResponse(responseCode = "404", description = "Holding not found")
     })
-    }
+
 
     // DELETE /api/holdings/{id}
     @DeleteMapping("/holdings/{id}")
