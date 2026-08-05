@@ -18,13 +18,17 @@ const PortfolioAllocation = () => {
       <PieChart>
 
      <Pie 
-     data = {portfolioData}
-        cx="50%"
-        cy="50%"
-        innerRadius={65}
-              outerRadius={90}
-              paddingAngle={4}
-              dataKey="value">
+    data={portfolioData}
+  cx="50%"
+  cy="50%"
+  innerRadius={65}
+  outerRadius={90}
+  paddingAngle={4}
+  dataKey="value"
+  isAnimationActive={true}
+  animationBegin={0}
+  animationDuration={1200}
+  animationEasing="ease-out">
    
      {portfolioData.map((entry, index) => (
                 <Cell
