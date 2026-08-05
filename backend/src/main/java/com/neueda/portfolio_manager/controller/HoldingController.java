@@ -19,6 +19,14 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+@Tag(
+        name = "Holding APIs",
+        description = "APIs for managing holdings and portfolio information"
+)
 @RestController
 @RequestMapping("/api")
 public class HoldingController {
@@ -28,7 +36,7 @@ public class HoldingController {
     public HoldingController(HoldingService holdingService) {
         this.holdingService = holdingService;
     }
-
+/*
     @GetMapping("/holdings")
     public ResponseEntity<List<Holding>> getAllHoldings() {
         return ResponseEntity.ok(holdingService.getAllHoldings());
@@ -46,14 +54,22 @@ public class HoldingController {
         return holdingService.getHoldingByMarketId(marketId)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
-    }
+    }*/
 
+    @Operation(
+            summary = "Create a holding",
+            description = "Creates a new holding in the portfolio."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Holding created successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid request")
+    })
     @PostMapping("/holdings")
     public ResponseEntity<Holding> createHolding(@RequestBody Holding holding) {
         Holding createdHolding = holdingService.createHolding(holding);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdHolding);
     }
-
+    /*
     @PutMapping("/holdings/{id}")
     public ResponseEntity<Void> updateHolding(@PathVariable int id, @RequestBody Holding holding) {
         boolean updated = holdingService.updateHolding(id, holding);
@@ -61,8 +77,16 @@ public class HoldingController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.noContent().build();
-    }
+    }*/
 
+    @Operation(
+            summary = "Delete a holding",
+            description = "Deletes a holding using its ID."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Holding deleted successfully"),
+            @ApiResponse(responseCode = "404", description = "Holding not found")
+    })
     @DeleteMapping("/holdings/{id}")
     public ResponseEntity<Void> deleteHolding(@PathVariable int id) {
         boolean deleted = holdingService.deleteHolding(id);
@@ -72,16 +96,37 @@ public class HoldingController {
         return ResponseEntity.noContent().build();
     }
 
+    @Operation(
+            summary = "Get portfolio allocation",
+            description = "Returns allocation details for all holdings."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Portfolio allocation retrieved successfully")
+    })
     @GetMapping("/portfolio/allocation")
     public ResponseEntity<List<HoldingAllocation>> getPortfolioAllocation() {
         return ResponseEntity.ok(holdingService.getPortfolioAllocation());
     }
 
+    @Operation(
+            summary = "Get sector allocation",
+            description = "Returns portfolio allocation grouped by sector."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Sector allocation retrieved successfully")
+    })
     @GetMapping("/portfolio/sectors")
     public ResponseEntity<List<SectorAllocation>> getSectorAllocation() {
         return ResponseEntity.ok(holdingService.getSectorAllocation());
     }
 
+    @Operation(
+            summary = "Get portfolio summary",
+            description = "Returns the total invested value, current value, and overall gain or loss."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Portfolio summary retrieved successfully")
+    })
     @GetMapping("/portfolio/summary")
     public ResponseEntity<Map<String, Double>> getPortfolioSummary() {
         double investedValue = holdingService.getTotalInvestedValue();
