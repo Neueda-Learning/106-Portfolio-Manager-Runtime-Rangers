@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.neueda.portfolio_manager.entity.Market;
+import com.neueda.portfolio_manager.exception.GlobalExceptionHandler;
 import com.neueda.portfolio_manager.service.MarketService;
 
 @RestController
@@ -25,10 +26,14 @@ public class MarketController {
     @Autowired
     private MarketService marketService;
 
-    // GET /api/market -> Complete Market List
+    // GET /api/market -> Complete Market List (exception handling enabled)
     @GetMapping
-    public ResponseEntity<List<Market>> getAllMarkets() {
-        return ResponseEntity.ok(marketService.getAllMarkets());
+    public ResponseEntity<?> getAllMarkets() {
+        try {
+            return ResponseEntity.ok(marketService.getAllMarkets());
+        } catch (Exception ex) {
+            return GlobalExceptionHandler.handle(ex);
+        }
     }
 
     // GET /api/market/search?symbol=AAPL -> Search Bar
@@ -37,16 +42,24 @@ public class MarketController {
         return ResponseEntity.ok(marketService.searchMarkets(symbol));
     }
 
-    // GET /api/market/gainers -> Top Gainers widget
+    // GET /api/market/gainers -> Top Gainers widget (exception handling enabled)
     @GetMapping("/gainers")
-    public ResponseEntity<List<Market>> getTopGainers() {
-        return ResponseEntity.ok(marketService.getTopGainers());
+    public ResponseEntity<?> getTopGainers() {
+        try {
+            return ResponseEntity.ok(marketService.getTopGainers());
+        } catch (Exception ex) {
+            return GlobalExceptionHandler.handle(ex);
+        }
     }
 
-    // GET /api/market/losers -> Top Losers widget
+    // GET /api/market/losers -> Top Losers widget (exception handling enabled)
     @GetMapping("/losers")
-    public ResponseEntity<List<Market>> getTopLosers() {
-        return ResponseEntity.ok(marketService.getTopLosers());
+    public ResponseEntity<?> getTopLosers() {
+        try {
+            return ResponseEntity.ok(marketService.getTopLosers());
+        } catch (Exception ex) {
+            return GlobalExceptionHandler.handle(ex);
+        }
     }
 
     // GET /api/market/{symbol} -> Stock Details Card
