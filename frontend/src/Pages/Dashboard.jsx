@@ -11,7 +11,7 @@ import { getPortfolioSummary } from "../api/portfolioApi";
 const Dashboard = () => {
   const [summary, setSummary] = useState(null);
  
- useEffect(() => {
+const fetchSummary = () => {
 
   getPortfolioSummary()
     .then((response) => {
@@ -24,6 +24,30 @@ const Dashboard = () => {
         error
       );
     });
+
+};
+
+
+useEffect(() => {
+
+  fetchSummary();
+
+
+  window.addEventListener(
+    "portfolioUpdated",
+    fetchSummary
+  );
+
+
+  return () => {
+
+    window.removeEventListener(
+      "portfolioUpdated",
+      fetchSummary
+    );
+
+  };
+
 
 }, []);
  
