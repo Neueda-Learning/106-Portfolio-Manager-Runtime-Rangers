@@ -4,6 +4,7 @@ import {
   updateHolding,
   deleteHolding
 } from "../../api/holdingApi";
+import toast from "react-hot-toast";
 
 
 const HoldingsTable = () => {
@@ -60,10 +61,9 @@ const HoldingsTable = () => {
       );
 
 
-      alert(
-        `${stock.symbol} quantity increased`
-      );
-
+      toast.success(
+  `${stock.symbol} quantity increased`
+);
 
     }
     catch(error){
@@ -106,6 +106,9 @@ const HoldingsTable = () => {
 
       await deleteHolding(
         sellModal.holdingId
+      );
+       toast.success(
+        `${sellModal.symbol} removed from portfolio`
       );
 
 
@@ -157,9 +160,9 @@ const HoldingsTable = () => {
 
 
 
-    alert(
-      `${sellQty} shares sold`
-    );
+    toast.success(
+  `${sellQty} ${sellModal.symbol} sold successfully`
+);
 
 
     setSellModal(null);
