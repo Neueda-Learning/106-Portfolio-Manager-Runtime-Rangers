@@ -8,7 +8,8 @@ import {
   ResponsiveContainer,
   Legend,
 } from "recharts";
-import axios from "axios";
+
+import { getSectorAllocation } from "../../api/portfolioApi";
 
 
 const COLORS = [
@@ -27,18 +28,12 @@ const SectorAllocation = () => {
 
   useEffect(() => {
 
-    axios
-      .get("http://localhost:8080/api/portfolio/sectors")
+    getSectorAllocation()
       .then((response) => {
 
         console.log("Sector Data:", response.data);
 
-        setSectorData(
-          response.data.map((item) => ({
-            ...item,
-            value: Number(item.value),
-          }))
-        );
+        setSectorData(response.data);
 
       })
       .catch((error) => {
@@ -78,14 +73,12 @@ const SectorAllocation = () => {
               animationEasing="ease-out"
             >
 
-              {
-                sectorData.map((entry,index)=>(
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={COLORS[index % COLORS.length]}
-                  />
-                ))
-              }
+              {sectorData.map((entry,index)=>(
+                <Cell
+                  key={`cell-${index}`}
+                  fill={COLORS[index % COLORS.length]}
+                />
+              ))}
 
             </Pie>
 

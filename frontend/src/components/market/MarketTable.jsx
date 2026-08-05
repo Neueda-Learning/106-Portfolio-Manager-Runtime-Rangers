@@ -1,21 +1,22 @@
 
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { getMarketStocks } from "../../api/marketApi";
 
 const MarketTable = ({search}) => {
     const [marketData, setMarketData] = useState([]);
 
-  useEffect(() => {
-    axios
-      .get("http://localhost:8080/api/market")
-      .then((response) => {
-        console.log(response.data);
-        setMarketData(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching market data:", error);
-      });
-  }, []);
+  useEffect(()=>{
+
+ getMarketStocks()
+ .then((response)=>{
+    setMarketData(response.data);
+ })
+ .catch((error)=>{
+    console.log(error);
+ });
+
+},[]);
 
   const filteredStocks = marketData.filter((stock) =>
   stock.companyName.toLowerCase().includes(search.toLowerCase()) ||

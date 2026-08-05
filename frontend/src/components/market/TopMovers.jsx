@@ -1,5 +1,9 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import {
+ getTopGainers,
+ getTopLosers
+} from "../../api/marketApi";
 
 const TopMovers = () => {
 
@@ -9,33 +13,21 @@ const TopMovers = () => {
   const topGainers = gainers.slice(0, 3);
 const topLosers = losers.slice(0, 2);
 
+useEffect(()=>{
 
-  useEffect(() => {
-
-    axios
-      .get("http://localhost:8080/api/market/gainers")
-      .then((response) => {
-        console.log("Gainers:", response.data);
-        setGainers(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching gainers:", error);
-      });
+ getTopGainers()
+ .then(res=>{
+   setGainers(res.data);
+ });
 
 
-    axios
-      .get("http://localhost:8080/api/market/losers")
-      .then((response) => {
-        console.log("Losers:", response.data);
-        setLosers(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching losers:", error);
-      });
+ getTopLosers()
+ .then(res=>{
+   setLosers(res.data);
+ });
 
 
-  }, []);
-
+},[]);
 
 
   return (
