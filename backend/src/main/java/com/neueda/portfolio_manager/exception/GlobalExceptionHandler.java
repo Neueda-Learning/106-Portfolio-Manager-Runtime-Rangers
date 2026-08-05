@@ -8,11 +8,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-public final class GlobalExceptionHandler {
+@RestControllerAdvice
+public class GlobalExceptionHandler {
 
-    private GlobalExceptionHandler() {
-    }
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<Map<String, Object>> handleJsonParseError(
             HttpMessageNotReadableException ex) {
@@ -22,24 +22,64 @@ public final class GlobalExceptionHandler {
                 "Invalid request body. Please check the input fields."
         );
     }
-    public static ResponseEntity<Map<String, Object>> handle(Exception ex) {
-        if (ex instanceof IllegalArgumentException) {
-            return build(HttpStatus.BAD_REQUEST, ex.getMessage());
-        }
-        if (ex instanceof IllegalStateException) {
-            return build(HttpStatus.CONFLICT, ex.getMessage());
-        }
-        if (ex instanceof DataAccessException dae) {
-            return build(HttpStatus.INTERNAL_SERVER_ERROR, "Database error: " + dae.getMostSpecificCause().getMessage());
-        }
-        return build(HttpStatus.INTERNAL_SERVER_ERROR, "Unexpected error: " + ex.getMessage());
+
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<Map<String, Object>> handleIllegalArgument(
+            IllegalArgumentException ex) {
+
+        return build(
+                HttpStatus.BAD_REQUEST,
+                ex.getMessage()
+        );
     }
 
-    private static ResponseEntity<Map<String, Object>> build(HttpStatus status, String message) {
+
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<Map<String, Object>> handleIllegalState(
+            IllegalStateException ex) {
+
+        return build(
+                HttpStatus.CONFLICT,
+                ex.getMessage()
+        );
+    }
+
+
+    @ExceptionHandler(DataAccessException.class)
+    public ResponseEntity<Map<String, Object>> handleDatabaseError(
+            DataAccessException ex) {
+
+        return build(
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                "Database error: " + ex.getMostSpecificCause().getMessage()
+        );
+    }
+
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Map<String, Object>> handleGenericException(
+            Exception ex) {
+
+        return build(
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                "Unexpected error: " + ex.getMessage()
+        );
+    }
+
+
+    private ResponseEntity<Map<String, Object>> build(
+            HttpStatus status,
+            String message) {
+
         Map<String, Object> body = new HashMap<>();
+
         body.put("status", status.value());
         body.put("error", status.getReasonPhrase());
         body.put("message", message);
-        return ResponseEntity.status(status).body(body);
+
+        return ResponseEntity
+                .status(status)
+                .body(body);
     }
 }
