@@ -1,59 +1,115 @@
+import React, { useEffect, useState } from "react";
 import ChartCard from "./ChartCard";
-import { sectorData } from "../../mock/dashboard";
-import {PieChart,Pie,Cell,Tooltip,ResponsiveContainer,Legend,} from "recharts";
+import {
+  PieChart,
+  Pie,
+  Cell,
+  Tooltip,
+  ResponsiveContainer,
+  Legend,
+} from "recharts";
+import axios from "axios";
+
 
 const COLORS = [
-  "#8B5CF6", 
-  "#06B6D4", 
-  "#22C55E", 
-  "#F59E0B", 
+  "#8B5CF6",
+  "#06B6D4",
+  "#22C55E",
+  "#F59E0B",
+  "#EF4444",
 ];
 
+
 const SectorAllocation = () => {
+
+  const [sectorData, setSectorData] = useState([]);
+
+
+  useEffect(() => {
+
+    axios
+      .get("http://localhost:8080/api/portfolio/sectors")
+      .then((response) => {
+
+        console.log("Sector Data:", response.data);
+
+        setSectorData(
+          response.data.map((item) => ({
+            ...item,
+            value: Number(item.value),
+          }))
+        );
+
+      })
+      .catch((error) => {
+
+        console.error(
+          "Error fetching sector allocation:",
+          error
+        );
+
+      });
+
+  }, []);
+
+
+
   return (
     <ChartCard title="Sector Allocation">
-      <div className="h-72 flex items-center justify-center text-[#A8A4B3]">
-      <ResponsiveContainer width="100%" height="100%">
-            
-            <PieChart>
-      
-           <Pie 
-            data={sectorData}
-  cx="50%"
-  cy="50%"
-  innerRadius={65}
-  outerRadius={90}
-  paddingAngle={4}
-  dataKey="value"
-  isAnimationActive={true}
-  animationBegin={0}
-  animationDuration={1200}
-  animationEasing="ease-out"
-  >
-         
-           {sectorData.map((entry, index) => (
-                      <Cell
-                        key={`cell-${index}`}
-            fill={COLORS[index % COLORS.length]}
-                      />
-                    ))}
-      
-      
-                    </Pie>
-                    <Tooltip />
-                      <Legend
-                    verticalAlign="bottom"
-                    iconType="circle"
+
+      <div className="h-72">
+
+        <ResponsiveContainer width="100%" height="100%">
+
+          <PieChart>
+
+            <Pie
+              data={sectorData}
+              cx="50%"
+              cy="50%"
+              innerRadius={65}
+              outerRadius={90}
+              paddingAngle={4}
+              dataKey="currentValue"
+              nameKey="sector"
+              isAnimationActive={true}
+              animationBegin={0}
+              animationDuration={1200}
+              animationEasing="ease-out"
+            >
+
+              {
+                sectorData.map((entry,index)=>(
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={COLORS[index % COLORS.length]}
                   />
-      
-      
-      
-            </PieChart>
-      
-           </ResponsiveContainer>
+                ))
+              }
+
+            </Pie>
+
+
+            <Tooltip
+              formatter={(value)=>`₹${value.toLocaleString()}`}
+            />
+
+
+            <Legend
+              verticalAlign="bottom"
+              iconType="circle"
+            />
+
+
+          </PieChart>
+
+        </ResponsiveContainer>
+
       </div>
+
     </ChartCard>
   );
 };
+
 
 export default SectorAllocation;

@@ -1,24 +1,63 @@
-import React from 'react';
+import React, { useEffect, useState } from "react";
 import ChartCard from "./ChartCard";
-import {portfolioData} from '../../mock/dashboard';
-import {PieChart,Pie,Cell,Tooltip,ResponsiveContainer,Legend,} from "recharts";
+import {
+  PieChart,
+  Pie,
+  Cell,
+  Tooltip,
+  ResponsiveContainer,
+  Legend,
+} from "recharts";
+import axios from "axios";
+
 
 const COLORS = [
-  "#8B5CF6", 
-  "#06B6D4", 
+  "#3B82F6", 
   "#22C55E", 
   "#F59E0B", 
+  "#EF4444", 
+  "#A855F7", 
 ];
+
+
 const PortfolioAllocation = () => {
+
+  const [portfolioData, setPortfolioData] = useState([]);
+
+
+  useEffect(() => {
+
+    axios
+      .get("http://localhost:8080/api/portfolio/allocation")
+      .then((response) => {
+        console.log(response.data);
+        setPortfolioData(response.data);
+      })
+      .catch((error) => {
+        console.error(
+          "Error fetching portfolio allocation:",
+          error
+        );
+      });
+
+  }, []);
+const chartData = portfolioData.map(item => ({
+  name: item.companyName,
+  value: Number(item.currentValue),
+}));
+
   return (
     <ChartCard title="Portfolio Allocation">
-      <div className="h-72 flex items-center justify-center text-[#A8A4B3]">
-     <ResponsiveContainer width="100%" height="100%">
-      
-      <PieChart>
 
-     <Pie 
-    data={portfolioData}
+      <div className="h-72">
+
+        <ResponsiveContainer width="100%" height="100%">
+
+          <PieChart>
+<Pie
+  data={chartData}
+  dataKey="value"
+  nameKey="name"
   cx="50%"
   cy="50%"
   innerRadius={65}
@@ -28,32 +67,34 @@ const PortfolioAllocation = () => {
   isAnimationActive={true}
   animationBegin={0}
   animationDuration={1200}
-  animationEasing="ease-out">
-   
-     {portfolioData.map((entry, index) => (
-                <Cell
-                  key={`cell-${index}`}
-      fill={COLORS[index % COLORS.length]}
-                />
-              ))}
+  animationEasing="ease-out"
+>
+  {
+    chartData.map((entry,index)=>(
+      <Cell
+        key={index}
+        fill={COLORS[index % COLORS.length]}
+      />
+    ))
+  }
+</Pie>
 
+<Tooltip />
 
-              </Pie>
-              <Tooltip />
-                <Legend
-              verticalAlign="bottom"
-              iconType="circle"
-            />
+<Legend
+ verticalAlign="bottom"
+ iconType="circle"
+/>
 
+</PieChart>
 
+        </ResponsiveContainer>
 
-      </PieChart>
-
-     </ResponsiveContainer>
       </div>
+
     </ChartCard>
   );
 };
 
-export default PortfolioAllocation;
 
+export default PortfolioAllocation;

@@ -5,8 +5,23 @@ import SummaryCard from "../components/dashboard/SummaryCard";
 import PortfolioAllocation from "../components/dashboard/PortfolioAllocation";
 import SectorAllocation from "../components/dashboard/SectorAllocation";
 import HoldingsTable from "../components/dashboard/HoldingTable";
+import  { useEffect, useState } from "react";
+import axios from "axios";
 
 const Dashboard = () => {
+  const [summary, setSummary] = useState(null);
+  useEffect(() => {
+  axios
+    .get("http://localhost:8080/api/portfolio/summary")
+    .then((response) => {
+      console.log(response.data);
+      setSummary(response.data);
+    })
+    .catch((error) => {
+      console.error("Error fetching portfolio summary:", error);
+    });
+}, []);
+ 
   return (
     <div className="min-h-screen bg-[#121018] text-white">
       <Header />
@@ -24,33 +39,44 @@ const Dashboard = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-8">
           <SummaryCard
-            title="Total Investment"
-            value="₹5,00,000"
-            change="+8%"
-            color="text-green-500"
-          />
+  title="Total Investment"
+  value={
+    summary
+      ? `₹${summary.totalInvestedValue.toLocaleString()}`
+      : "Loading..."
+  }
+  change="+8%"
+  color="text-green-500"
+/>
 
-          <SummaryCard
-            title="Portfolio Value"
-            value="₹5,65,000"
-            change="+13%"
-            color="text-green-500"
-          />
+<SummaryCard
+  title="Portfolio Value"
+  value={
+    summary
+      ? `₹${summary.totalCurrentValue.toLocaleString()}`
+      : "Loading..."
+  }
+  change="+13%"
+  color="text-green-500"
+/>
 
-          <SummaryCard
-            title="Profit"
-            value="₹65,000"
-            change="+₹12,000"
-            color="text-green-500"
-          />
+<SummaryCard
+  title="Profit"
+  value={
+    summary
+      ? `₹${summary.totalGainLoss.toLocaleString()}`
+      : "Loading..."
+  }
+  change="+₹120"
+  color={summary && summary.totalGainLoss >= 0 ? "text-green-500" : "text-red-500"}
+/>
 
-          <SummaryCard
-            title="Return"
-            value="13%"
-            change="+3%"
-            color="text-green-500"
-          />
-
+<SummaryCard
+  title="Return"
+  value="13%"
+  change="+3%"
+  color="text-green-500"
+/>
         
           </div>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8">
