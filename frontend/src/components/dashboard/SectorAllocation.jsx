@@ -18,13 +18,18 @@ const SectorAllocation = () => {
             <PieChart>
       
            <Pie 
-           data = {sectorData}
-              cx="50%"
-              cy="50%"
-              innerRadius={65}
-                    outerRadius={90}
-                    paddingAngle={4}
-                    dataKey="value">
+            data={sectorData}
+  cx="50%"
+  cy="50%"
+  innerRadius={65}
+  outerRadius={90}
+  paddingAngle={4}
+  dataKey="value"
+  isAnimationActive={true}
+  animationBegin={0}
+  animationDuration={1200}
+  animationEasing="ease-out"
+  >
          
            {sectorData.map((entry, index) => (
                       <Cell

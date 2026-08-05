@@ -64,6 +64,9 @@ public class HoldingController {
             @ApiResponse(responseCode = "201", description = "Holding created successfully"),
             @ApiResponse(responseCode = "400", description = "Invalid request")
     })
+    }
+
+    // POST /api/holdings
     @PostMapping("/holdings")
     public ResponseEntity<Holding> createHolding(@RequestBody Holding holding) {
         Holding createdHolding = holdingService.createHolding(holding);
@@ -87,12 +90,14 @@ public class HoldingController {
             @ApiResponse(responseCode = "204", description = "Holding deleted successfully"),
             @ApiResponse(responseCode = "404", description = "Holding not found")
     })
+    }
+
+    // DELETE /api/holdings/{id}
     @DeleteMapping("/holdings/{id}")
     public ResponseEntity<Void> deleteHolding(@PathVariable int id) {
-        boolean deleted = holdingService.deleteHolding(id);
-        if (!deleted) {
-            return ResponseEntity.notFound().build();
-        }
+
+        holdingService.deleteHolding(id);
+
         return ResponseEntity.noContent().build();
     }
 
@@ -103,6 +108,7 @@ public class HoldingController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Portfolio allocation retrieved successfully")
     })
+    // GET /api/portfolio/allocation
     @GetMapping("/portfolio/allocation")
     public ResponseEntity<List<HoldingAllocation>> getPortfolioAllocation() {
         return ResponseEntity.ok(holdingService.getPortfolioAllocation());
@@ -115,6 +121,7 @@ public class HoldingController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Sector allocation retrieved successfully")
     })
+    // GET /api/portfolio/sectors
     @GetMapping("/portfolio/sectors")
     public ResponseEntity<List<SectorAllocation>> getSectorAllocation() {
         return ResponseEntity.ok(holdingService.getSectorAllocation());
@@ -127,6 +134,7 @@ public class HoldingController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Portfolio summary retrieved successfully")
     })
+    // GET /api/portfolio/summary
     @GetMapping("/portfolio/summary")
     public ResponseEntity<Map<String, Double>> getPortfolioSummary() {
         double investedValue = holdingService.getTotalInvestedValue();
