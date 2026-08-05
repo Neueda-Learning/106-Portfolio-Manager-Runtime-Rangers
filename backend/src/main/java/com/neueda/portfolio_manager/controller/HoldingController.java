@@ -73,6 +73,11 @@ public class HoldingController {
         return ResponseEntity.status(HttpStatus.CREATED).body(createdHolding);
     }
 
+    @Operation(
+            summary = "Update an existing holding",
+            description = "Updates the details of an existing holding using its ID. Used by the sell flow to update holding quantity instead of deleting the holding."
+    )
+
     @PutMapping("/holdings/{id}")
     public ResponseEntity<Void> updateHolding(@PathVariable int id, @RequestBody Holding holding) {
         boolean updated = holdingService.updateHolding(id, holding);
