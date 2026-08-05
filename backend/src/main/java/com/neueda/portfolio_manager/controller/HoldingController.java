@@ -104,6 +104,28 @@ public class HoldingController {
         return ResponseEntity.noContent().build();
     }
 
+    @Operation(
+            summary = "Update holding by market ID",
+            description = "Updates an existing holding using the associated market ID. Used to modify holding details such as quantity after buy/sell operations."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "204",
+                    description = "Holding updated successfully"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "No holding found for the given market ID"
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Invalid holding data provided"
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Internal server error"
+            )
+    })
     @PutMapping("/holding/market/{marketId}")
     public ResponseEntity<Void> updateByMarketId(@PathVariable int marketId, @RequestBody Holding holding) {
         boolean updated = holdingService.updateByMarketId(marketId, holding);
