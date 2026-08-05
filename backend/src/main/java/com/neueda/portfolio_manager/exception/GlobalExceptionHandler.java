@@ -6,17 +6,22 @@ import java.util.Map;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 
-/**
- * Not a @RestControllerAdvice on purpose: only specific endpoints should use
- * this handling, so it is called explicitly (via try/catch) from those
- * controller methods instead of applying globally to every endpoint.
- */
 public final class GlobalExceptionHandler {
 
     private GlobalExceptionHandler() {
     }
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<Map<String, Object>> handleJsonParseError(
+            HttpMessageNotReadableException ex) {
 
+        return build(
+                HttpStatus.BAD_REQUEST,
+                "Invalid request body. Please check the input fields."
+        );
+    }
     public static ResponseEntity<Map<String, Object>> handle(Exception ex) {
         if (ex instanceof IllegalArgumentException) {
             return build(HttpStatus.BAD_REQUEST, ex.getMessage());

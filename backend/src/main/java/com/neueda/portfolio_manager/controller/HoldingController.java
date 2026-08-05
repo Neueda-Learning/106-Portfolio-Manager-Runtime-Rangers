@@ -3,7 +3,6 @@ package com.neueda.portfolio_manager.controller;
 import com.neueda.portfolio_manager.entity.Holding;
 import com.neueda.portfolio_manager.entity.HoldingAllocation;
 import com.neueda.portfolio_manager.entity.SectorAllocation;
-import com.neueda.portfolio_manager.exception.GlobalExceptionHandler;
 import com.neueda.portfolio_manager.service.HoldingService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -49,15 +48,11 @@ public class HoldingController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    // POST /api/holdings -> exception handling enabled
+    // POST /api/holdings
     @PostMapping("/holdings")
-    public ResponseEntity<?> createHolding(@RequestBody Holding holding) {
-        try {
-            Holding createdHolding = holdingService.createHolding(holding);
-            return ResponseEntity.status(HttpStatus.CREATED).body(createdHolding);
-        } catch (Exception ex) {
-            return GlobalExceptionHandler.handle(ex);
-        }
+    public ResponseEntity<Holding> createHolding(@RequestBody Holding holding) {
+        Holding createdHolding = holdingService.createHolding(holding);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdHolding);
     }
 
     @PutMapping("/holdings/{id}")
@@ -69,55 +64,39 @@ public class HoldingController {
         return ResponseEntity.noContent().build();
     }
 
-    // DELETE /api/holdings/{id} -> exception handling enabled
+    // DELETE /api/holdings/{id}
     @DeleteMapping("/holdings/{id}")
-    public ResponseEntity<?> deleteHolding(@PathVariable int id) {
-        try {
-            boolean deleted = holdingService.deleteHolding(id);
-            if (!deleted) {
-                return ResponseEntity.notFound().build();
-            }
-            return ResponseEntity.noContent().build();
-        } catch (Exception ex) {
-            return GlobalExceptionHandler.handle(ex);
+    public ResponseEntity<Void> deleteHolding(@PathVariable int id) {
+        boolean deleted = holdingService.deleteHolding(id);
+        if (!deleted) {
+            return ResponseEntity.notFound().build();
         }
+        return ResponseEntity.noContent().build();
     }
 
-    // GET /api/portfolio/allocation -> exception handling enabled
+    // GET /api/portfolio/allocation
     @GetMapping("/portfolio/allocation")
-    public ResponseEntity<?> getPortfolioAllocation() {
-        try {
-            return ResponseEntity.ok(holdingService.getPortfolioAllocation());
-        } catch (Exception ex) {
-            return GlobalExceptionHandler.handle(ex);
-        }
+    public ResponseEntity<List<HoldingAllocation>> getPortfolioAllocation() {
+        return ResponseEntity.ok(holdingService.getPortfolioAllocation());
     }
 
-    // GET /api/portfolio/sectors -> exception handling enabled
+    // GET /api/portfolio/sectors
     @GetMapping("/portfolio/sectors")
-    public ResponseEntity<?> getSectorAllocation() {
-        try {
-            return ResponseEntity.ok(holdingService.getSectorAllocation());
-        } catch (Exception ex) {
-            return GlobalExceptionHandler.handle(ex);
-        }
+    public ResponseEntity<List<SectorAllocation>> getSectorAllocation() {
+        return ResponseEntity.ok(holdingService.getSectorAllocation());
     }
 
-    // GET /api/portfolio/summary -> exception handling enabled
+    // GET /api/portfolio/summary
     @GetMapping("/portfolio/summary")
-    public ResponseEntity<?> getPortfolioSummary() {
-        try {
-            double investedValue = holdingService.getTotalInvestedValue();
-            double currentValue = holdingService.getTotalCurrentValue();
+    public ResponseEntity<Map<String, Double>> getPortfolioSummary() {
+        double investedValue = holdingService.getTotalInvestedValue();
+        double currentValue = holdingService.getTotalCurrentValue();
 
-            Map<String, Double> summary = new LinkedHashMap<>();
-            summary.put("totalInvestedValue", investedValue);
-            summary.put("totalCurrentValue", currentValue);
-            summary.put("totalGainLoss", currentValue - investedValue);
+        Map<String, Double> summary = new LinkedHashMap<>();
+        summary.put("totalInvestedValue", investedValue);
+        summary.put("totalCurrentValue", currentValue);
+        summary.put("totalGainLoss", currentValue - investedValue);
 
-            return ResponseEntity.ok(summary);
-        } catch (Exception ex) {
-            return GlobalExceptionHandler.handle(ex);
-        }
+        return ResponseEntity.ok(summary);
     }
 }
