@@ -18,39 +18,67 @@ import org.springframework.web.bind.annotation.RestController;
 import com.neueda.portfolio_manager.entity.Market;
 import com.neueda.portfolio_manager.service.MarketService;
 
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+
+@Tag(
+        name = "Market APIs",
+        description = "APIs for retrieving and managing market information"
+)
 @RestController
 @RequestMapping("/api/market")
 public class MarketController {
-
     @Autowired
     private MarketService marketService;
 
     // GET /api/market -> Complete Market List
+    @Operation(
+            summary = "Get all market data",
+            description = "Retrieves the complete list of market stocks."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Market list retrieved successfully")
+    })
     @GetMapping
     public ResponseEntity<List<Market>> getAllMarkets() {
         return ResponseEntity.ok(marketService.getAllMarkets());
     }
 
     // GET /api/market/search?symbol=AAPL -> Search Bar
-    @GetMapping("/search")
+    /*@GetMapping("/search")
     public ResponseEntity<List<Market>> searchMarkets(@RequestParam String symbol) {
         return ResponseEntity.ok(marketService.searchMarkets(symbol));
-    }
+    }*/
 
     // GET /api/market/gainers -> Top Gainers widget
-    @GetMapping("/gainers")
-    public ResponseEntity<List<Market>> getTopGainers() {
+    @Operation(
+            summary = "Get top gainers",
+            description = "Returns the list of stocks with the highest positive price change."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Top gainers retrieved successfully")
+    })
+    @GetMapping("/gainers")    public ResponseEntity<List<Market>> getTopGainers() {
         return ResponseEntity.ok(marketService.getTopGainers());
     }
 
     // GET /api/market/losers -> Top Losers widget
-    @GetMapping("/losers")
-    public ResponseEntity<List<Market>> getTopLosers() {
+    @Operation(
+            summary = "Get top losers",
+            description = "Returns the list of stocks with the highest negative price change."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Top losers retrieved successfully")
+    })
+    @GetMapping("/losers")    public ResponseEntity<List<Market>> getTopLosers() {
         return ResponseEntity.ok(marketService.getTopLosers());
     }
 
     // GET /api/market/{symbol} -> Stock Details Card
-    @GetMapping("/{symbol}")
+   /* @GetMapping("/{symbol}")
     public ResponseEntity<Market> getMarketBySymbol(@PathVariable String symbol) {
         return ResponseEntity.ok(marketService.getMarketBySymbol(symbol));
     }
@@ -76,5 +104,5 @@ public class MarketController {
     public ResponseEntity<Void> deleteMarket(@PathVariable String symbol) {
         marketService.deleteMarket(symbol);
         return ResponseEntity.noContent().build();
-    }
+    }*/
 }
