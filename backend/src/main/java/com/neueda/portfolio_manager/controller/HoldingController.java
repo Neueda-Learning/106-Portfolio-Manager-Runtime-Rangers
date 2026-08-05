@@ -141,9 +141,15 @@ public class HoldingController {
         double currentValue = holdingService.getTotalCurrentValue();
 
         Map<String, Double> summary = new LinkedHashMap<>();
+        double gainLoss = currentValue - investedValue;
+
         summary.put("totalInvestedValue", investedValue);
         summary.put("totalCurrentValue", currentValue);
-        summary.put("totalGainLoss", currentValue - investedValue);
+        summary.put("totalGainLoss", gainLoss);
+        summary.put(
+                "growthPercentage",
+                investedValue == 0 ? 0.0 : (gainLoss / investedValue) * 100
+        );
 
         return ResponseEntity.ok(summary);
     }
