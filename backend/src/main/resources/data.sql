@@ -1,7 +1,7 @@
 USE portfolio_db;
 
 
-INSERT IGNORE INTO market
+INSERT INTO market
 (symbol, company_name, exchange, sector, current_price, change_percent)
 VALUES
 
@@ -35,7 +35,7 @@ VALUES
 
 
 
-INSERT IGNORE INTO holding
+INSERT INTO holding
 (
  market_id,
  quantity,
