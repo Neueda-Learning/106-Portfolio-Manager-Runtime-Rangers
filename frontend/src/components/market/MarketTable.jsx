@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { getMarketStocks } from "../../api/marketApi";
+import { buyStock } from "../../api/holdingApi";
 
 const MarketTable = ({search}) => {
     const [marketData, setMarketData] = useState([]);
@@ -17,6 +18,41 @@ const MarketTable = ({search}) => {
  });
 
 },[]);
+
+const handleBuy = async(stock)=>{
+
+    const holding = {
+         id : 1,
+        marketId: stock.id,
+        quantity: 1,
+        purchasePrice: stock.currentPrice,
+        purchaseDate: new Date()
+            .toISOString()
+            .split("T")[0]
+    };
+
+
+    try{
+
+        await buyStock(holding);
+
+        alert(
+          `${stock.symbol} bought successfully`
+        );
+
+    }
+    
+    catch(error){
+
+        console.error(
+          "Buy failed:",
+          error
+        );
+
+    }
+    
+
+};
 
   const filteredStocks = marketData.filter((stock) =>
   stock.companyName.toLowerCase().includes(search.toLowerCase()) ||
@@ -86,9 +122,12 @@ const MarketTable = ({search}) => {
               <td>
                 <div className="flex justify-center gap-2">
 
-                  <button className="bg-green-600 hover:bg-green-700 px-3 py-2 rounded-lg text-sm transition">
-                    Buy
-                  </button>
+                <button
+ onClick={()=>handleBuy(stock)}
+ className="bg-green-600 hover:bg-green-700 px-3 py-2 rounded-lg text-sm"
+>
+ Buy
+</button>
 
                   <button className="bg-red-600 hover:bg-red-700 px-3 py-2 rounded-lg text-sm transition">
                     Sell
