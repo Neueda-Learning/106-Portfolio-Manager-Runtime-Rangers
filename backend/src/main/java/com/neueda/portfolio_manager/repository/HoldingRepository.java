@@ -88,6 +88,26 @@ public class HoldingRepository {
         return rows > 0;
     }
 
+    public boolean updateByMarketId(Holding holding) {
+
+        String sql = """
+            UPDATE holding 
+            SET quantity = ?, 
+                purchase_price = ?, 
+                purchase_date = ?
+            WHERE market_id = ?
+            """;
+
+        int rows = jdbcTemplate.update(sql,
+                holding.getQuantity(),
+                holding.getPurchasePrice(),
+                toSqlDate(holding.getPurchaseDate()),
+                holding.getMarketId()
+        );
+
+        return rows > 0;
+    }
+
     public boolean deleteById(int id) {
         String sql = "DELETE FROM holding WHERE id = ?";
         return jdbcTemplate.update(sql, id) > 0;
