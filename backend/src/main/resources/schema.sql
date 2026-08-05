@@ -1,7 +1,5 @@
-CREATE DATABASE IF NOT EXISTS portfolio_db;
-
-USE portfolio_db;
-
+DROP TABLE IF EXISTS holding;
+DROP TABLE IF EXISTS market;
 
 CREATE TABLE IF NOT EXISTS market (
 
