@@ -107,7 +107,7 @@ class MarketControllerTest {
 	@Test
 	void getTopLosersReturnsStocksWithNegativeChanges() throws Exception {
 		when(marketService.getTopLosers()).thenReturn(List.of(
-				market(5, "TSLA", "Tesla Inc.", "NASDAQ", "Automotive", 175.40, -4.75),
+				market(5, "TSLA", "Tesla Inc.", "NYSE", "Automotive", 175.40, -4.75),
 				market(6, "NFLX", "Netflix Inc.", "NASDAQ", "Communication Services", 598.80, -2.20)
 		));
 
