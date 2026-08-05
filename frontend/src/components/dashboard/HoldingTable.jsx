@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import {
   getHoldings,
   updateHolding,
-  sellStock
+  deleteHolding
 } from "../../api/holdingApi";
 
 
@@ -90,43 +90,94 @@ const HoldingsTable = () => {
 
   const handleSellConfirm = async()=>{
 
-    try{
+  const sellQty = Number(sellQuantity);
 
-      await sellStock(
+
+  const remainingQuantity =
+    sellModal.quantity - sellQty;
+
+
+  try{
+
+
+  
+    if(remainingQuantity === 0){
+
+
+      await deleteHolding(
         sellModal.holdingId
       );
 
 
-      const response = await getHoldings();
-
-      setHoldings(response.data);
+    }
 
 
-      window.dispatchEvent(
-        new Event("portfolioUpdated")
+    
+    else{
+
+
+      const updatedHolding = {
+
+        id: sellModal.holdingId,
+
+        marketId: sellModal.marketId,
+
+        quantity: remainingQuantity,
+
+        purchasePrice: sellModal.purchasePrice,
+
+        purchaseDate: sellModal.purchaseDate
+
+      };
+
+
+      await updateHolding(
+        sellModal.holdingId,
+        updatedHolding
       );
-
-
-      alert(
-        `${sellModal.symbol} sold successfully`
-      );
-
-
-      setSellModal(null);
-      setSellQuantity(1);
 
 
     }
-    catch(error){
 
-      console.error(
-        "Sell failed:",
-        error.response?.data || error
-      );
 
-    }
 
-  };
+ 
+
+    const response = await getHoldings();
+
+    setHoldings(response.data);
+
+
+
+    
+
+    window.dispatchEvent(
+      new Event("portfolioUpdated")
+    );
+
+
+
+    alert(
+      `${sellQty} shares sold`
+    );
+
+
+    setSellModal(null);
+
+    setSellQuantity(1);
+
+
+  }
+  catch(error){
+
+    console.error(
+      "Sell failed:",
+      error.response?.data || error
+    );
+
+  }
+
+};
 
 
 
