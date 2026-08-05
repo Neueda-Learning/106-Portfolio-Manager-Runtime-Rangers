@@ -72,7 +72,7 @@ public class HoldingController {
         Holding createdHolding = holdingService.createHolding(holding);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdHolding);
     }
-    /*
+
     @PutMapping("/holdings/{id}")
     public ResponseEntity<Void> updateHolding(@PathVariable int id, @RequestBody Holding holding) {
         boolean updated = holdingService.updateHolding(id, holding);
@@ -80,7 +80,7 @@ public class HoldingController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.noContent().build();
-    }*/
+    }
 
     @Operation(
             summary = "Delete a holding",
