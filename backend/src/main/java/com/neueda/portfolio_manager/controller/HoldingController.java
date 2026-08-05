@@ -77,7 +77,24 @@ public class HoldingController {
             summary = "Update an existing holding",
             description = "Updates the details of an existing holding using its ID. Used by the sell flow to update holding quantity instead of deleting the holding."
     )
-
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "204",
+                    description = "Holding updated successfully"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Holding not found with the given ID"
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Invalid holding data provided"
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Internal server error"
+            )
+    })
     @PutMapping("/holdings/{id}")
     public ResponseEntity<Void> updateHolding(@PathVariable int id, @RequestBody Holding holding) {
         boolean updated = holdingService.updateHolding(id, holding);
