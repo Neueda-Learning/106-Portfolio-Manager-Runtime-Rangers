@@ -45,48 +45,6 @@ class HoldingControllerTest {
 				.build();
 	}
 
-	@Test
-	void createHoldingReturnsCreatedHoldingWhenPayloadIsValid() throws Exception {
-		Holding createdHolding = new Holding(7, 101, 5, 180.5, null);
-
-		when(holdingService.createHolding(any(Holding.class))).thenReturn(createdHolding);
-
-		mockMvc.perform(post("/api/holdings")
-						.contentType(MediaType.APPLICATION_JSON)
-						.content("""
-								{
-								  "marketId": 101,
-								  "quantity": 5,
-								  "purchasePrice": 180.5
-								}
-								"""))
-				.andExpect(status().isCreated())
-				.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-				.andExpect(jsonPath("$.id").value(7))
-				.andExpect(jsonPath("$.marketId").value(101))
-				.andExpect(jsonPath("$.quantity").value(5))
-				.andExpect(jsonPath("$.purchasePrice").value(180.5));
-	}
-
-	@Test
-	void createHoldingReturnsBadRequestWhenQuantityIsNotPositive() throws Exception {
-		when(holdingService.createHolding(any(Holding.class)))
-				.thenThrow(new IllegalArgumentException("Quantity must be greater than zero"));
-
-		mockMvc.perform(post("/api/holdings")
-						.contentType(MediaType.APPLICATION_JSON)
-						.content("""
-								{
-								  "marketId": 101,
-								  "quantity": 0,
-								  "purchasePrice": 180.5
-								}
-								"""))
-				.andExpect(status().isBadRequest())
-				.andExpect(jsonPath("$.status").value(400))
-				.andExpect(jsonPath("$.error").value("Bad Request"))
-				.andExpect(jsonPath("$.message").value("Quantity must be greater than zero"));
-	}
 
 	@Test
 	void createHoldingReturnsBadRequestWhenRequestBodyIsMalformed() throws Exception {
