@@ -1,21 +1,22 @@
 import { holdings } from "../../mock/dashboard";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import {
+ getHoldings,
+ deleteHolding
+} from "../../api/holdingApi";
 
 const HoldingsTable = () => {
  const [holdings, setHoldings] = useState([]);
 
-  useEffect(() => {
-  axios
-    .get("http://localhost:8080/api/portfolio/allocation")
-    .then((response) => {
-      console.log(response.data);
-      setHoldings(response.data);
-    })
-    .catch((error) => {
-      console.error("Error fetching holdings:", error);
-    });
-}, []);
+ useEffect(()=>{
+
+getHoldings()
+.then(res=>{
+ setHoldings(res.data);
+});
+
+},[]);
   return (
      <div className="bg-[#1D1826] border border-[#32293F] rounded-2xl mt-8 overflow-hidden">
 

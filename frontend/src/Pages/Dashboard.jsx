@@ -6,20 +6,25 @@ import PortfolioAllocation from "../components/dashboard/PortfolioAllocation";
 import SectorAllocation from "../components/dashboard/SectorAllocation";
 import HoldingsTable from "../components/dashboard/HoldingTable";
 import  { useEffect, useState } from "react";
-import axios from "axios";
+import { getPortfolioSummary } from "../api/portfolioApi";
 
 const Dashboard = () => {
   const [summary, setSummary] = useState(null);
-  useEffect(() => {
-  axios
-    .get("http://localhost:8080/api/portfolio/summary")
+ 
+ useEffect(() => {
+
+  getPortfolioSummary()
     .then((response) => {
       console.log(response.data);
       setSummary(response.data);
     })
     .catch((error) => {
-      console.error("Error fetching portfolio summary:", error);
+      console.error(
+        "Error fetching portfolio summary:",
+        error
+      );
     });
+
 }, []);
  
   return (

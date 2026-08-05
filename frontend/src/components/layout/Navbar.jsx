@@ -9,7 +9,7 @@ const Navbar = () => {
     }`;
 
   return (
-    <div className="mt-8 bg-[#1D1826] border border-[#32293F] rounded-2xl shadow-lg">
+    <div className="mt-2 bg-[#1D1826] border border-[#32293F] rounded-2xl shadow-lg">
       <div className="flex items-center h-16">
 
         <NavLink to="/" end className={navClass}>
