@@ -77,7 +77,7 @@ useEffect(() => {
       ? `₹${summary.totalInvestedValue.toLocaleString()}`
       : "Loading..."
   }
-  change="+8%"
+ 
   color="text-green-500"
 />
 
@@ -88,21 +88,35 @@ useEffect(() => {
       ? `₹${summary.totalCurrentValue.toLocaleString()}`
       : "Loading..."
   }
-  change="+13%"
-  color="text-green-500"
+  change={
+    summary
+      ? `${summary.totalGainLoss >= 0 ? "+" : ""}${summary.totalGainLoss.toLocaleString()}`
+      : ""
+  }
+  color={
+    summary && summary.totalGainLoss >= 0
+      ? "text-green-500"
+      : "text-red-500"
+  }
 />
 
 <SummaryCard
-  title="Profit"
+  title={
+    summary && summary.totalGainLoss < 0
+      ? "Loss"
+      : "Profit"
+  }
   value={
     summary
-      ? `₹${summary.totalGainLoss.toLocaleString()}`
+      ? `₹${Math.abs(summary.totalGainLoss).toLocaleString()}`
       : "Loading..."
   }
-  change="+₹120"
-  color={summary && summary.totalGainLoss >= 0 ? "text-green-500" : "text-red-500"}
+  color={
+    summary && summary.totalGainLoss >= 0
+      ? "text-green-500"
+      : "text-red-500"
+  }
 />
-
 <SummaryCard
   title="Return"
   value={
