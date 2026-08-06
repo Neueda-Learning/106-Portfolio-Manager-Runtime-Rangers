@@ -113,10 +113,7 @@ fi
 
                     dir("${workDir}/backend") {
 
-                        sh '''
-chmod +x mvnw
-./mvnw -B clean test
-'''
+sh 'chmod +x mvnw && ./mvnw -B clean test -Dspring.profiles.active=test'
                     }
                 }
             }
