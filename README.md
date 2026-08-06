@@ -86,24 +86,24 @@ Managing equity portfolios across multiple sectors requires tracking volatile ma
 ### 1. Market Module (`com.neueda.portfolio_manager.controller.MarketController`)
 - **Responsibilities**: Manages master market securities (ticker, company, exchange, sector, current price, change percentage).
 - **Core Endpoints**:
-    - `GET /api/market`: Returns full catalog of market securities.
-    - `GET /api/market/gainers`: Returns top 5 stocks sorted by highest positive price change percentage.
-    - `GET /api/market/losers`: Returns top 5 stocks sorted by highest negative price change percentage.
+  - `GET /api/market`: Returns full catalog of market securities.
+  - `GET /api/market/gainers`: Returns top 5 stocks sorted by highest positive price change percentage.
+  - `GET /api/market/losers`: Returns top 5 stocks sorted by highest negative price change percentage.
 
 ### 2. Holding & Portfolio Module (`com.neueda.portfolio_manager.controller.HoldingController`)
 - **Responsibilities**: Manages user investment positions, calculates portfolio cost basis, market valuation, asset allocation, and sector exposure.
 - **Core Endpoints**:
-    - `POST /api/holdings`: Inserts a new holding position (market ID, quantity, purchase price, purchase date).
-    - `DELETE /api/holdings/{id}`: Liquidation/removal of a portfolio holding position by primary key ID.
-    - `GET /api/portfolio/allocation`: Computes holding-level allocation percentage and gain/loss metrics.
-    - `GET /api/portfolio/sectors`: Computes sector-level aggregated quantity, invested value, current value, and percentage exposure.
-    - `GET /api/portfolio/summary`: Aggregates total invested value, total current market value, and net gain/loss.
+  - `POST /api/holdings`: Inserts a new holding position (market ID, quantity, purchase price, purchase date).
+  - `DELETE /api/holdings/{id}`: Liquidation/removal of a portfolio holding position by primary key ID.
+  - `GET /api/portfolio/allocation`: Computes holding-level allocation percentage and gain/loss metrics.
+  - `GET /api/portfolio/sectors`: Computes sector-level aggregated quantity, invested value, current value, and percentage exposure.
+  - `GET /api/portfolio/summary`: Aggregates total invested value, total current market value, and net gain/loss.
 
 ### 3. Frontend Visualization Module (`frontend/src`)
 - **Responsibilities**: User dashboard rendering, component-driven UI states, chart animations, and API synchronization.
 - **Pages**:
-    - **Investment Overview (`/`)**: Key performance indicators (KPIs), Portfolio Allocation Chart, Sector Allocation Chart, Holdings Table.
-    - **Market (`/market`)**: Stock Search Bar, Top Gainers / Losers Cards, Interactive Stock Catalog Table.
+  - **Investment Overview (`/`)**: Key performance indicators (KPIs), Portfolio Allocation Chart, Sector Allocation Chart, Holdings Table.
+  - **Market (`/market`)**: Stock Search Bar, Top Gainers / Losers Cards, Interactive Stock Catalog Table.
 
 ---
 
@@ -488,8 +488,8 @@ cd 106-Portfolio-Manager-Runtime-Rangers-main
 1. Ensure MySQL Server is running on `localhost:3306`.
 2. The Spring Boot application automatically creates the `portfolio_db` database and runs `schema.sql` / `data.sql` on startup.
 3. Default credentials configured in `application.properties`:
-    - **Username**: `root`
-    - **Password**: `n3u3da!`
+   - **Username**: `root`
+   - **Password**: `n3u3da!`
 
 ---
 
@@ -592,17 +592,6 @@ cd frontend
 npm run lint
 ```
 
----
-
-## 🖼️ UI Screenshots
-
-| Investment Overview Dashboard | Market Mover Analytics |
-| :---: | :---: |
-| ![Dashboard Screenshot](docs/images/dashboard.png) | ![Market Screenshot](docs/images/market.png) |
-
-| Interactive Swagger API Docs |
-| :---: |
-| ![Swagger Screenshot](docs/images/swagger.png) |
 
 ---
 
