@@ -102,9 +102,21 @@ useEffect(() => {
 
 <SummaryCard
   title="Return"
-  value="13%"
-  change="+3%"
-  color="text-green-500"
+  value={
+    summary
+      ? `${summary.growthPercentage.toFixed(2)}%`
+      : "Loading..."
+  }
+  change={
+    summary && summary.growthPercentage >= 0
+      ? `+${summary.growthPercentage.toFixed(2)}%`
+      : `${summary?.growthPercentage.toFixed(2)}%`
+  }
+  color={
+    summary && summary.growthPercentage >= 0
+      ? "text-green-500"
+      : "text-red-500"
+  }
 />
         
           </div>
