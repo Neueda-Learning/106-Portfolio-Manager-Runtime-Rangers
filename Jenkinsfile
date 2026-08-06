@@ -14,7 +14,7 @@ pipeline {
         ENV_FILE = '.env'
 
         REPO_URL = 'https://github.com/Neueda-Learning/106-Portfolio-Manager-Runtime-Rangers.git'
-        REPO_BRANCH = 'main'
+        REPO_BRANCH = 'feature/deployment'
 
          VITE_GROQ_KEY  = credentials('groq-api-key')
     }
