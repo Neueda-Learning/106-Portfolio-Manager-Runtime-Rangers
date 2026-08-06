@@ -45,6 +45,16 @@ const handleBuyConfirm = async()=>{
 
 const buyQty = Number(buyQuantity);
 
+if(!buyQty || buyQty <= 0){
+
+toast.error(
+"Quantity must be greater than 0"
+);
+
+return;
+
+}
+
 
 try{
 
@@ -160,11 +170,21 @@ setSellQuantity(1);
 
 
 
-const handleSellConfirm=async()=>{
+const handleSellConfirm = async()=>{
 
 
-const sellQty=Number(sellQuantity);
+const sellQty = Number(sellQuantity);
 
+
+if(!sellQty || sellQty <= 0){
+
+toast.error(
+"Sell quantity must be greater than 0"
+);
+
+return;
+
+}
 
 
 try{
@@ -172,11 +192,11 @@ try{
 
 const response = await getHoldings();
 
-const holdings=response.data;
+const holdings = response.data;
 
 
-const existingStock=holdings.find(
-item=>item.marketId===sellModal.id
+const existingStock = holdings.find(
+item => item.marketId === sellModal.id
 );
 
 
@@ -210,35 +230,30 @@ existingStock.quantity - sellQty;
 
 
 
-if(remaining===0){
-
+if(remaining === 0){
 
 await deleteHolding(
 existingStock.holdingId
 );
-
 
 }
 
 else{
 
 
-const updatedHolding={
+const updatedHolding = {
 
-id:existingStock.holdingId,
+id: existingStock.holdingId,
 
-marketId:existingStock.marketId,
+marketId: existingStock.marketId,
 
-quantity:remaining,
+quantity: remaining,
 
-purchasePrice:
-existingStock.purchasePrice,
+purchasePrice: existingStock.purchasePrice,
 
-purchaseDate:
-existingStock.purchaseDate
+purchaseDate: existingStock.purchaseDate
 
 };
-
 
 
 await updateHolding(
@@ -268,7 +283,6 @@ setSellModal(null);
 
 }
 
-
 catch(error){
 
 console.error(error);
@@ -276,7 +290,6 @@ console.error(error);
 toast.error(
 "Sell failed"
 );
-
 
 }
 
@@ -530,48 +543,58 @@ transition
     }
 
 
-    {
+     {
 buyModal && (
 
 <div className="
-fixed inset-0
-bg-black/60
-flex items-center justify-center
-z-50
+  theme-modal-overlay
+  fixed inset-0
+  bg-black/60
+  flex items-center justify-center
+  z-50
 ">
 
 
 <div className="
-bg-[#1D1826]
-border border-[#32293F]
-rounded-2xl
-p-6
-w-96
+  theme-modal
+  bg-[#1D1826]
+  border border-[#32293F]
+  rounded-2xl
+  p-6
+  w-96
 ">
 
 
 <h2 className="
-text-xl
-font-semibold
-text-white
+  theme-primary-text
+  text-xl
+  font-semibold
+  text-white
 ">
 
-
-</h2>
 Buy {buyModal.symbol}
 
+</h2>
 
-<p className="text-[#A8A4B3] mt-3">
+
+
+<p className="theme-muted text-[#A8A4B3] mt-3">
 
 Current Quantity:
 
-<span className="text-white font-semibold ml-2">
+<span className="
+theme-primary-text
+text-white
+font-semibold
+ml-2
+">
 
 {buyModal.quantity}
 
 </span>
 
 </p>
+
 
 
 <input
@@ -616,8 +639,8 @@ mt-6
 onClick={()=>setBuyModal(null)}
 
 className="
-px-4
-py-2
+theme-button-secondary
+px-4 py-2
 rounded-xl
 bg-[#32293F]
 text-white
@@ -641,6 +664,7 @@ py-2
 rounded-xl
 bg-green-500
 text-white
+hover:bg-green-600
 "
 
 >

@@ -45,6 +45,17 @@ const handleBuyConfirm = async()=>{
 const buyQty = Number(buyQuantity);
 
 
+if(!buyQty || buyQty <= 0){
+
+toast.error(
+"Quantity must be greater than 0"
+);
+
+return;
+
+}
+
+
 const updatedHolding = {
 
   id: buyModal.holdingId,
@@ -136,7 +147,7 @@ if(
 ){
 
 toast.error(
-`You can sell maximum ${sellModal.quantity} stocks`
+`You have to sell minimum 1 stock and maximum ${sellModal.quantity} stocks`
 );
 
 return;
@@ -536,31 +547,33 @@ return;
       )
     }
 
-
-    {
+ {
 buyModal && (
 
 <div className="
-fixed inset-0
-bg-black/60
-flex items-center justify-center
-z-50
+  theme-modal-overlay
+  fixed inset-0
+  bg-black/60
+  flex items-center justify-center
+  z-50
 ">
 
 
 <div className="
-bg-[#1D1826]
-border border-[#32293F]
-rounded-2xl
-p-6
-w-96
+  theme-modal
+  bg-[#1D1826]
+  border border-[#32293F]
+  rounded-2xl
+  p-6
+  w-96
 ">
 
 
 <h2 className="
-text-xl
-font-semibold
-text-white
+  theme-primary-text
+  text-xl
+  font-semibold
+  text-white
 ">
 
 Buy {buyModal.symbol}
@@ -568,17 +581,24 @@ Buy {buyModal.symbol}
 </h2>
 
 
-<p className="text-[#A8A4B3] mt-3">
+
+<p className="theme-muted text-[#A8A4B3] mt-3">
 
 Current Quantity:
 
-<span className="text-white font-semibold ml-2">
+<span className="
+theme-primary-text
+text-white
+font-semibold
+ml-2
+">
 
 {buyModal.quantity}
 
 </span>
 
 </p>
+
 
 
 <input
@@ -591,11 +611,7 @@ min="1"
 
 onChange={(e)=>{
 
-const value = Number(e.target.value);
-
-if(value > 0){
-  setBuyQuantity(value);
-}
+setBuyQuantity(e.target.value);
 
 }}
 
@@ -627,8 +643,8 @@ mt-6
 onClick={()=>setBuyModal(null)}
 
 className="
-px-4
-py-2
+theme-button-secondary
+px-4 py-2
 rounded-xl
 bg-[#32293F]
 text-white
@@ -652,6 +668,7 @@ py-2
 rounded-xl
 bg-green-500
 text-white
+hover:bg-green-600
 "
 
 >
@@ -671,7 +688,6 @@ Confirm Buy
 
 )
 }
-
 
     </>
 
