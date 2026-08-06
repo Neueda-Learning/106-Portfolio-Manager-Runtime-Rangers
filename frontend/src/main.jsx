@@ -12,9 +12,9 @@ createRoot(document.getElementById('root')).render(
     toastOptions={{
       duration: 3000,
       style: {
-        background: "#1D1826",
-        color: "#fff",
-        border: "1px solid #32293F",
+        background: "var(--toast-bg)",
+        color: "var(--toast-text)",
+        border: "1px solid var(--toast-border)",
       },
     }}
   />

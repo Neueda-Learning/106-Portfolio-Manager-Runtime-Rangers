@@ -1,1 +1,150 @@
 @import "tailwindcss";
+
+:root {
+	--app-bg: #121018;
+	--surface-1: #16111d;
+	--surface-2: #1d1826;
+	--surface-3: #241c30;
+	--surface-hover: #262033;
+	--border: #32293f;
+	--text-primary: #f9fafb;
+	--text-muted: #a8a4b3;
+	--accent: #b784f7;
+	--accent-soft: rgba(183, 132, 247, 0.12);
+	--overlay: rgba(0, 0, 0, 0.6);
+	--toast-bg: #1d1826;
+	--toast-text: #ffffff;
+	--toast-border: #32293f;
+}
+
+[data-theme="light"] {
+	--app-bg: #f4f7fb;
+	--surface-1: #ffffff;
+	--surface-2: #ffffff;
+	--surface-3: #eef2f8;
+	--surface-hover: #f8fbff;
+	--border: #d7e1f0;
+	--text-primary: #14213d;
+	--text-muted: #5e6b82;
+	--accent: #0b6aa2;
+	--accent-soft: rgba(11, 106, 162, 0.12);
+	--overlay: rgba(20, 33, 61, 0.28);
+	--toast-bg: #ffffff;
+	--toast-text: #14213d;
+	--toast-border: #d7e1f0;
+}
+
+body {
+	background: var(--app-bg);
+	color: var(--text-primary);
+}
+
+.page-shell {
+	background: var(--app-bg);
+	color: var(--text-primary);
+}
+
+.page-subtitle,
+.theme-muted {
+	color: var(--text-muted);
+}
+
+.theme-primary-text,
+.theme-card-title,
+.theme-card-value,
+.app-brand {
+	color: var(--text-primary);
+}
+
+.app-header {
+	background: var(--surface-1);
+	border-color: var(--border);
+}
+
+.header-icon {
+	color: var(--text-muted);
+}
+
+.header-icon:hover,
+.header-user:hover {
+	color: var(--accent);
+}
+
+.theme-toggle {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4rem;
+	padding: 0.4rem 0.7rem;
+	border-radius: 0.7rem;
+	border: 1px solid var(--border);
+	background: var(--surface-2);
+	color: var(--text-primary);
+	font-size: 0.85rem;
+	font-weight: 600;
+	transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.theme-toggle:hover {
+	background: var(--accent-soft);
+	border-color: var(--accent);
+}
+
+.app-navbar,
+.theme-card,
+.theme-modal {
+	background: var(--surface-2);
+	border-color: var(--border);
+}
+
+.summary-card:hover,
+.theme-table-row:hover {
+	background: var(--surface-hover);
+}
+
+.nav-link {
+	color: var(--text-muted);
+}
+
+.nav-link:hover {
+	color: var(--text-primary);
+}
+
+.nav-link-active {
+	color: var(--accent);
+	border-color: var(--accent);
+}
+
+.theme-table-head,
+.theme-table-toolbar {
+	background: var(--surface-3);
+	color: var(--text-muted);
+	border-color: var(--border);
+}
+
+.theme-table-row {
+	border-color: var(--border);
+}
+
+.theme-input {
+	background: var(--surface-3);
+	border-color: var(--border);
+	color: var(--text-primary);
+}
+
+.theme-input::placeholder {
+	color: var(--text-muted);
+}
+
+.theme-input:focus {
+	border-color: var(--accent);
+}
+
+.theme-modal-overlay {
+	background: var(--overlay);
+}
+
+.theme-button-secondary {
+	background: var(--surface-3);
+	color: var(--text-primary);
+	border: 1px solid var(--border);
+}

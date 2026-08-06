@@ -8,7 +8,7 @@ import HoldingsTable from "../components/dashboard/HoldingTable";
 import  { useEffect, useState } from "react";
 import { getPortfolioSummary } from "../api/portfolioApi";
 
-const Dashboard = () => {
+const Dashboard = ({ theme, onToggleTheme }) => {
   const [summary, setSummary] = useState(null);
  
 const fetchSummary = () => {
@@ -52,17 +52,20 @@ useEffect(() => {
 }, []);
  
   return (
-    <div className="min-h-screen bg-[#121018] text-white">
-      <Header />
+    <div className="page-shell min-h-screen bg-[#121018] text-white">
+      <Header
+        theme={theme}
+        onToggleTheme={onToggleTheme}
+      />
 
-      <div className="max-w-7xl mx-auto px-6 py-8">
+      <div className="page-content max-w-7xl mx-auto px-6 py-8">
         <Navbar />
 
         <h1 className="text-3xl font-bold mt-8">
           Investment Overview
         </h1>
 
-        <p className="text-[#A8A4B3] mt-2">
+        <p className="page-subtitle text-[#A8A4B3] mt-2">
           Track your portfolio performance and market insights.
         </p>
 
