@@ -106,6 +106,8 @@ else{
 
 const holding={
 
+id: 1,
+
 marketId: buyModal.id,
 
 quantity: buyQty,
@@ -159,12 +161,53 @@ toast.error(
 };
 
 
-const openSellModal=(stock)=>{
+const openSellModal = async(stock)=>{
+
+try{
+
+const response = await getHoldings();
+
+const holdings = response.data;
 
 
-setSellModal(stock);
+const holding = holdings.find(
+item => item.marketId === stock.id
+);
+
+
+if(!holding){
+
+toast.error(
+"You don't own this stock"
+);
+
+return;
+
+}
+
+
+
+
+setSellModal({
+  ...stock,
+  quantity: holding.quantity,
+});
+
+
 setSellQuantity(1);
 
+
+}
+
+catch(error){
+
+console.error(error);
+
+toast.error(
+"Unable to fetch quantity"
+);
+
+}
 
 };
 
