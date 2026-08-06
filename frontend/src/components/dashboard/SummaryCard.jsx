@@ -3,13 +3,13 @@ import { TrendingUp, TrendingDown } from "lucide-react";
 
 const SummaryCard = ({ title, value, change, color }) => {
   return (
-    <div className="bg-[#1D1826] border border-[#32293F] rounded-2xl shadow-lg p-6 hover:bg-[#262033] transition-all duration-300">
+    <div className="theme-card summary-card bg-[#1D1826] border border-[#32293F] rounded-2xl shadow-lg p-6 hover:bg-[#262033] transition-all duration-300">
 
-      <h3 className="text-[#A8A4B3] text-sm font-medium">
+      <h3 className="theme-muted text-[#A8A4B3] text-sm font-medium">
         {title}
       </h3>
 
-      <h2 className="text-3xl font-bold text-white mt-4">
+      <h2 className="theme-card-value text-3xl font-bold text-white mt-4">
         {value}
       </h2>
 

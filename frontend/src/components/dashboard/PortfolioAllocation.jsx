@@ -12,11 +12,21 @@ import axios from "axios";
 
 
 const COLORS = [
-  "#3B82F6", 
+  "#8B5CF6", 
+  "#06B6D4",
   "#22C55E", 
-  "#F59E0B", 
+  "#F59E0B",
   "#EF4444", 
+  "#EC4899", 
+  "#14B8A6", 
+  "#6366F1", 
+  "#84CC16", 
+  "#F97316", 
   "#A855F7", 
+  "#0EA5E9", 
+  "#64748B", 
+  "#D946EF", 
+  "#EAB308"  
 ];
 
 
@@ -28,7 +38,7 @@ const PortfolioAllocation = () => {
   useEffect(() => {
 
     axios
-      .get("http://localhost:8080/api/portfolio/allocation")
+      .get("http://10.9.77.127:8082/api/portfolio/allocation")
       .then((response) => {
         console.log(response.data);
         setPortfolioData(response.data);

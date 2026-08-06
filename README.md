@@ -33,6 +33,8 @@
 - [Continuous Integration & Delivery (Jenkins)](#-continuous-integration--delivery-jenkins)
 - [Configuration Reference (`application.properties`)](#-configuration-reference-applicationproperties)
 - [Installation & Local Setup](#-installation--local-setup)
+- [Installation & Local Setup](#-installation--local-setup)
+- [Configuration Reference](#-configuration-reference)
 - [Testing & Quality Assurance](#-testing--quality-assurance)
 - [UI Screenshots](#-ui-screenshots)
 - [Engineering Roadmap](#-engineering-roadmap)
@@ -67,6 +69,8 @@ Managing equity portfolios across multiple sectors requires tracking volatile ma
 - 🔄 **Automated CI/CD Pipeline**: Declarative `Jenkinsfile` orchestrating automated checkout, compilation, linting, Docker image builds, and container deployment.
 - 🚀 **Modern Reactive-Ready UI**: Single-page application (SPA) built with React 19, TailwindCSS 4 dark theme, and Vite build system.
 - 🔄 **Self-Bootstrapping Relational Persistence**: Automatic execution of `schema.sql` and `data.sql` DDL/DML scripts on Spring Boot initialization (`spring.sql.init.mode=always`).
+- 🚀 **Modern Reactive-Ready UI**: Single-page application (SPA) built with React 19, TailwindCSS 4 dark theme, and Vite build system.
+- 🔄 **Self-Bootstrapping Relational Persistence**: Automatic execution of `schema.sql` and `data.sql` DDL/DML scripts on Spring Boot initialization.
 
 ---
 
@@ -146,6 +150,7 @@ flowchart TD
         Dashboard["Dashboard View (Dashboard.jsx)"]
         MarketView["Market View (Market.jsx)"]
         AxiosClient["Axios HTTP Client (Port 5173 / 80)"]
+        AxiosClient["Axios HTTP Client (Port 5173)"]
     end
 
     subgraph Server ["Backend Layer (Spring Boot 4.1)"]
@@ -172,6 +177,12 @@ flowchart TD
     RestController -->|JSON Response| AxiosClient
 ```
 
+### Architectural Layering
+1. **Controller Layer**: Exposes strict REST endpoints, defines OpenAPI Swagger documentation, and validates incoming JSON payloads.
+2. **Service Layer**: Implements domain business logic (e.g., verifying `quantity > 0`, computing portfolio metrics).
+3. **Repository Layer**: Uses Spring `JdbcTemplate` to execute optimized SQL statements and map SQL `ResultSet` rows into domain objects (`Holding`, `Market`, `HoldingAllocation`, `SectorAllocation`).
+4. **Database Layer**: Enforces referential integrity using foreign keys (`holding.market_id` → `market.id`).
+
 ---
 
 ## 📂 Project Structure
@@ -182,6 +193,7 @@ flowchart TD
 ├── docker-compose.yml                         # Multi-container Docker Compose Orchestration File
 ├── backend                                    # Spring Boot Backend Project
 │   ├── Dockerfile                             # Multi-stage Maven/JDK 17 Dockerfile
+├── backend                                    # Spring Boot Backend Project
 │   ├── .mvn/                                  # Maven Wrapper Binaries
 │   ├── mvnw                                   # Maven Wrapper (Linux/macOS)
 │   ├── mvnw.cmd                               # Maven Wrapper (Windows)
@@ -471,94 +483,89 @@ The application uses a centralized `@RestControllerAdvice` class (`GlobalExcepti
 
 ---
 
-## 🐳 Docker Support & Containerization
+## 🚀 Installation & Local Setup
 
-The repository provides production-ready Docker containerization support using multi-stage Dockerfiles and Docker Compose (`docker-compose.yml`).
+### Prerequisites
+Before running the application, ensure you have installed:
+- **Java JDK 17+**: `java -version`
+- **Node.js 18+ & npm**: `node -v` and `npm -v`
+- **MySQL 8.0+**: Running locally on port `3306`
+- **Git**: `git --version`
 
-```
-                     ┌─────────────────────────────────────────┐
-                     │            Docker Compose               │
-                     │          (docker-compose.yml)           │
-                     └────────────────────┬────────────────────┘
-                                          │
-        ┌─────────────────────────────────┼─────────────────────────────────┐
-        ▼                                 ▼                                 ▼
-┌──────────────────────┐       ┌──────────────────────┐       ┌──────────────────────┐
-│  mysqldb Container   │       │  backend Container   │       │  frontend Container  │
-├──────────────────────┤       ├──────────────────────┤       ├──────────────────────┤
-│ - Image: mysql:8.0   │       │ - Multi-stage Build  │       │ - Multi-stage Build  │
-│ - Database:          │<──────│   Maven 3.9 + JDK 17 │<──────│   Node 20 + Nginx    │
-│   portfolio_db       │       │ - Port: 8080         │       │ - Port: 80           │
-│ - Port: 3306         │       │ - Environment:       │       │ - Served Static SPA  │
-│ - Health check ping  │       │   SPRING_DATASOURCE  │       │   production bundle  │
-└──────────────────────┘       └──────────────────────┘       └──────────────────────┘
-```
+---
 
-### Docker File Architecture
-
-#### 1. Backend Dockerfile (`backend/Dockerfile`)
-- **Stage 1 (Build)**: Uses `maven:3.9.6-eclipse-temurin-17-alpine` to compile the Spring Boot application and package executable JAR files without running unit tests.
-- **Stage 2 (Runtime)**: Lightweight `eclipse-temurin:17-jre-alpine` runtime executing `app.jar` on port `8080`.
-
-#### 2. Frontend Dockerfile (`frontend/Dockerfile`)
-- **Stage 1 (Build)**: Uses `node:20-alpine` to install dependencies and execute `npm run build` targeting Vite static output (`dist/`).
-- **Stage 2 (Runtime)**: High-performance `nginx:alpine` web server serving compiled static SPA assets on port `80`.
-
-#### 3. Docker Compose Configuration (`docker-compose.yml`)
-Orchestrates three isolated microservices:
-- **`mysqldb`**: MySQL 8.0 server with `healthcheck` ping probing database readiness.
-- **`backend`**: Spring Boot container configured via `SPRING_DATASOURCE_URL=jdbc:mysql://mysqldb:3306/portfolio_db`, dependent on `mysqldb` healthy condition.
-- **`frontend`**: Nginx container serving React SPA on port `80`.
-
-### Docker Commands Reference
-
+### 1. Clone Repository
 ```bash
-# Build and run containers in background
-docker compose up --build -d
-
-# View container status
-docker compose ps
-
-# View real-time container logs
-docker compose logs -f
-
-# Stop containers & clean volumes
-docker compose down -v
+git clone https://github.com/RuntimeRangers/Portfolio-Manager.git
+cd 106-Portfolio-Manager-Runtime-Rangers-main
 ```
 
 ---
 
-## 🔄 Continuous Integration & Delivery (Jenkins)
-
-The project includes a declarative [Jenkinsfile](file:///c:/Users/Administrator/Downloads/106-Portfolio-Manager-Runtime-Rangers-main/106-Portfolio-Manager-Runtime-Rangers-main/Jenkinsfile) located in the repository root to automate testing, build validation, and container deployment.
-
-```mermaid
-flowchart LR
-    Checkout["1. Checkout Source"] --> BackendBuild["2. Maven Test & Package"]
-    BackendBuild --> FrontendBuild["3. NPM Lint & Vite Build"]
-    FrontendBuild --> DockerBuild["4. Docker Compose Build"]
-    DockerBuild --> Deploy["5. Deploy Stack"]
-```
-
-### Jenkins Pipeline Stages
-
-1. **Checkout**: Pulls latest codebase from source control (`checkout scm`).
-2. **Backend Unit Tests & Package**: Navigates to `backend` and executes Maven compilation and tests (`./mvnw clean package`).
-3. **Frontend Install & Lint**: Navigates to `frontend`, installs packages (`npm install`), runs ESLint (`npm run lint`), and verifies build creation (`npm run build`).
-4. **Build Docker Images**: Executes `docker compose build` to construct backend and frontend container images.
-5. **Deploy Stack**: Runs `docker compose up -d` to launch the containerized application stack.
+### 2. Database Setup
+1. Ensure MySQL Server is running on `localhost:3306`.
+2. The Spring Boot application automatically creates the `portfolio_db` database and runs `schema.sql` / `data.sql` on startup.
+3. Default credentials configured in `application.properties`:
+    - **Username**: `root`
+    - **Password**: `n3u3da!`
 
 ---
 
-## ⚙️ Configuration Reference (`application.properties`)
+### 3. Backend Setup & Run
 
-### Spring Boot Properties File (`backend/src/main/resources/application.properties`)
+Navigate to `backend`:
+```bash
+cd backend
+```
+
+Build and run using the Maven Wrapper:
+- **macOS / Linux**:
+  ```bash
+  ./mvnw spring-boot:run
+  ```
+- **Windows (Command Prompt / PowerShell)**:
+  ```cmd
+  mvnw.cmd spring-boot:run
+  ```
+
+Backend services will be live at:
+- **REST API Base URL**: `http://localhost:8080`
+- **Interactive Swagger UI**: `http://localhost:8080/swagger-ui.html`
+- **OpenAPI JSON Docs**: `http://localhost:8080/v3/api-docs`
+
+---
+
+### 4. Frontend Setup & Run
+
+Open a separate terminal window and navigate to `frontend`:
+```bash
+cd frontend
+```
+
+Install NPM packages:
+```bash
+npm install
+```
+
+Start the Vite development server:
+```bash
+npm run dev
+```
+
+The React web application will open at:
+- **Local Application UI**: `http://localhost:5173`
+
+---
+
+## ⚙️ Configuration Reference
+
+### Backend Settings (`backend/src/main/resources/application.properties`)
 
 ```properties
 # Application Identifier
 spring.application.name=portfolio-manager
 
-# Database Datasource Connection
+# MySQL Datasource Connection
 spring.datasource.url=jdbc:mysql://localhost:3306/portfolio_db
 spring.datasource.username=root
 spring.datasource.password=n3u3da!
@@ -572,87 +579,16 @@ spring.mvc.throw-exception-if-no-handler-found=true
 spring.web.resources.add-mappings=false
 ```
 
-### Property Parameter Analysis
+### Production Environment Override Table
 
-| Property Key | Configured Value | Engineering Impact & Purpose |
-| :--- | :--- | :--- |
-| `spring.application.name` | `portfolio-manager` | Sets Spring application name for logging and metric identification. |
-| `spring.datasource.url` | `jdbc:mysql://localhost:3306/portfolio_db` | Connects JDBC driver to local or containerized MySQL database `portfolio_db`. |
-| `spring.datasource.username` | `root` | Database access username. |
-| `spring.datasource.password` | `n3u3da!` | Database access password. |
-| `spring.datasource.driver-class-name` | `com.mysql.cj.jdbc.Driver` | Specifies MySQL Connector/J driver class for connection pooling. |
-| `spring.sql.init.mode` | `always` | Instructs Spring Boot to unconditionally execute `schema.sql` and `data.sql` DDL/DML on startup. |
-| `spring.mvc.throw-exception-if-no-handler-found` | `true` | Ensures 404 handler failures throw exceptions intercepted by `GlobalExceptionHandler`. |
-| `spring.web.resources.add-mappings` | `false` | Disables default Spring Boot static resource mapping to enforce REST JSON purity. |
-
-### Environment Variable Overrides
-
-| Environment Variable | Target Property | Default Fallback Value | Description |
+| Environment Variable | Target Property | Default Value | Description |
 | :--- | :--- | :--- | :--- |
-| `SPRING_DATASOURCE_URL` | `spring.datasource.url` | `jdbc:mysql://localhost:3306/portfolio_db` | JDBC MySQL connection URL. |
-| `SPRING_DATASOURCE_USERNAME` | `spring.datasource.username` | `root` | MySQL user. |
-| `SPRING_DATASOURCE_PASSWORD` | `spring.datasource.password` | `n3u3da!` | MySQL password. |
+| `DB_URL` | `spring.datasource.url` | `jdbc:mysql://localhost:3306/portfolio_db` | JDBC MySQL connection URL. |
+| `DB_USER` | `spring.datasource.username` | `root` | Database username. |
+| `DB_PASS` | `spring.datasource.password` | `n3u3da!` | Database password. |
 
 > [!CAUTION]
 > **Security Advisory**: Never commit plain-text database credentials to public source repositories. Always use environment variable substitution for production deployments.
-
----
-
-## 🚀 Installation & Local Setup
-
-### Option A: Quickstart via Docker Compose (Recommended)
-Ensure Docker Engine and Docker Compose are installed (`docker --version`, `docker compose version`):
-```bash
-# 1. Clone repository
-git clone https://github.com/RuntimeRangers/Portfolio-Manager.git
-cd 106-Portfolio-Manager-Runtime-Rangers-main
-
-# 2. Build and run containers in background
-docker compose up --build -d
-```
-### Access Points
-
-Once the application is successfully running, the different services can be accessed using the following URLs:
-
-| Service | URL | Description |
-|---------|-----|-------------|
-| Frontend Application | http://localhost | User interface of the Portfolio Manager application |
-| Backend REST API | http://localhost:8082 | Spring Boot backend API endpoints |
-| Swagger API Documentation | http://localhost:8082/swagger-ui/index.html | Interactive API documentation and testing interface |
-
-
-### Option B: Local Development Setup (Manual)
-
-#### Prerequisites
-- **Java JDK 17+**: `java -version`
-- **Node.js 18+ & npm**: `node -v` and `npm -v`
-- **MySQL 8.0+**: Running locally on port `3306`
-- **Git**: `git --version`
-
-#### 1. Database Setup
-Ensure MySQL is running on `localhost:3306`. The backend automatically initializes `portfolio_db` schema via `schema.sql` and `data.sql`. Default credentials:
-- **Username**: `root`
-- **Password**: `n3u3da!`
-
-#### 2. Run Backend Application
-```bash
-cd backend
-# Linux/macOS:
-./mvnw spring-boot:run
-
-# Windows:
-mvnw.cmd spring-boot:run
-```
-
-#### 3. Run Frontend Application
-```bash
-cd frontend
-npm install
-npm run dev
-```
-Access points:
-- **Frontend UI**: `http://localhost:5173`
-- **Backend REST API**: `http://localhost:8080`
 
 ---
 
@@ -676,6 +612,17 @@ npm run lint
 
 ---
 
+## 🖼️ UI Screenshots
+
+| Investment Overview Dashboard | Market Mover Analytics |
+| :---: | :---: |
+| ![Dashboard Screenshot](docs/images/dashboard.png) | ![Market Screenshot](docs/images/market.png) |
+
+| Interactive Swagger API Docs |
+| :---: |
+| ![Swagger Screenshot](docs/images/swagger.png) |
+
+---
 
 ## 🔮 Engineering Roadmap
 
@@ -683,8 +630,7 @@ npm run lint
 - [ ] **Real-Time Stock Ticker Integration**: Integration with external market REST/WebSocket APIs (Alpha Vantage / Finnhub).
 - [ ] **Interactive Buy / Sell Order Flow**: Full UI modal handling instant stock transactions.
 - [ ] **Historical Performance Charts**: Line chart analytics representing portfolio valuation over time (1D, 1M, 1Y, ALL).
-- [x] **Docker Containerization**: Multi-stage Dockerfiles (`backend/Dockerfile`, `frontend/Dockerfile`) and `docker-compose.yml` orchestration.
-- [x] **CI/CD Pipeline Automation**: Declarative `Jenkinsfile` for automated multi-stage build, test, lint, and deployment.
+- [ ] **Docker Containerization**: `Dockerfile` and `docker-compose.yml` for unified single-command deployment.
 
 ---
 
