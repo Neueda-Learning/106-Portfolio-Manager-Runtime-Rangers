@@ -12,7 +12,8 @@ const HoldingsTable = () => {
   const [holdings, setHoldings] = useState([]);
   const [sellModal, setSellModal] = useState(null);
   const [sellQuantity, setSellQuantity] = useState(1);
-
+  const [buyQuantity, setBuyQuantity] = useState(1);
+  const [buyModal, setBuyModal] = useState(null);
 
   useEffect(() => {
 
@@ -31,51 +32,87 @@ const HoldingsTable = () => {
 
 
 
-  const handleBuy = async(stock) => {
+ const openBuyModal = (stock)=>{
 
-    const updatedHolding = {
-          id: 1,
-      marketId: stock.marketId,
-      quantity: stock.quantity + 1,
-      purchasePrice: stock.purchasePrice,
-      purchaseDate: stock.purchaseDate
+  setBuyModal(stock);
+  setBuyQuantity(1);
 
-    };
+};
+
+const handleBuyConfirm = async()=>{
 
 
-    try {
-
-      await updateHolding(
-        stock.holdingId,
-        updatedHolding
-      );
+const buyQty = Number(buyQuantity);
 
 
-      const response = await getHoldings();
+const updatedHolding = {
 
-      setHoldings(response.data);
+  id: buyModal.holdingId,
+
+  marketId: buyModal.marketId,
+
+  quantity: buyModal.quantity + buyQty,
+
+  purchasePrice: buyModal.purchasePrice,
+
+  purchaseDate: buyModal.purchaseDate
+
+};
 
 
-      window.dispatchEvent(
-        new Event("portfolioUpdated")
-      );
+
+try{
 
 
-      toast.success(
-  `${stock.symbol} quantity increased`
+await updateHolding(
+  buyModal.holdingId,
+  updatedHolding
 );
 
-    }
-    catch(error){
 
-      console.error(
-        "Buy failed:",
-        error.response?.data || error
-      );
 
-    }
+const response = await getHoldings();
 
-  };
+setHoldings(response.data);
+
+
+
+window.dispatchEvent(
+ new Event("portfolioUpdated")
+);
+
+
+
+toast.success(
+`${buyQty} ${buyModal.symbol} bought successfully`
+);
+
+
+
+setBuyModal(null);
+
+setBuyQuantity(1);
+
+
+}
+
+catch(error){
+
+console.error(
+"Buy failed:",
+error.response?.data || error
+);
+
+
+toast.error(
+"Buy failed"
+);
+
+
+}
+
+
+};
 
 
 
@@ -91,6 +128,21 @@ const HoldingsTable = () => {
   const handleSellConfirm = async()=>{
 
   const sellQty = Number(sellQuantity);
+
+
+if(
+  sellQty <= 0 ||
+  sellQty > sellModal.quantity
+){
+
+toast.error(
+`You can sell maximum ${sellModal.quantity} stocks`
+);
+
+return;
+
+}
+
 
 
   const remainingQuantity =
@@ -261,19 +313,19 @@ const HoldingsTable = () => {
 
 
 
-              <td td className="px-6 py-5">
+              <td  className="px-6 py-5">
                 {stock.quantity}
               </td>
 
 
 
-              <td td className="px-8 py-5">
+              <td  className="px-8 py-5">
                 ₹{stock.currentPrice.toLocaleString()}
               </td>
 
 
 
-              <td td className="px-10 py-5">
+              <td  className="px-10 py-5">
                 ₹{stock.currentValue.toLocaleString()}
               </td>
 
@@ -297,7 +349,7 @@ const HoldingsTable = () => {
 
 
                   <button
-                    onClick={()=>handleBuy(stock)}
+                    onClick={()=>openBuyModal(stock)}
                     className="
                     bg-green-500/10
                     border border-green-500/30
@@ -483,6 +535,142 @@ const HoldingsTable = () => {
 
       )
     }
+
+
+    {
+buyModal && (
+
+<div className="
+fixed inset-0
+bg-black/60
+flex items-center justify-center
+z-50
+">
+
+
+<div className="
+bg-[#1D1826]
+border border-[#32293F]
+rounded-2xl
+p-6
+w-96
+">
+
+
+<h2 className="
+text-xl
+font-semibold
+text-white
+">
+
+Buy {buyModal.symbol}
+
+</h2>
+
+
+<p className="text-[#A8A4B3] mt-3">
+
+Current Quantity:
+
+<span className="text-white font-semibold ml-2">
+
+{buyModal.quantity}
+
+</span>
+
+</p>
+
+
+<input
+
+type="number"
+
+value={buyQuantity}
+
+min="1"
+
+onChange={(e)=>{
+
+const value = Number(e.target.value);
+
+if(value > 0){
+  setBuyQuantity(value);
+}
+
+}}
+
+className="
+theme-input
+mt-5
+w-full
+bg-[#241C30]
+border border-[#32293F]
+rounded-xl
+px-4 py-3
+text-white
+"
+
+/>
+
+
+
+<div className="
+flex
+justify-end
+gap-3
+mt-6
+">
+
+
+<button
+
+onClick={()=>setBuyModal(null)}
+
+className="
+px-4
+py-2
+rounded-xl
+bg-[#32293F]
+text-white
+"
+
+>
+
+Cancel
+
+</button>
+
+
+
+<button
+
+onClick={handleBuyConfirm}
+
+className="
+px-4
+py-2
+rounded-xl
+bg-green-500
+text-white
+"
+
+>
+
+Confirm Buy
+
+</button>
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+)
+}
 
 
     </>

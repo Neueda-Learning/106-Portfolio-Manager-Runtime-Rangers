@@ -15,6 +15,8 @@ pipeline {
 
         REPO_URL = 'https://github.com/Neueda-Learning/106-Portfolio-Manager-Runtime-Rangers.git'
         REPO_BRANCH = 'main'
+
+         VITE_GROQ_KEY  = credentials('groq-api-key')
     }
 
 
@@ -180,6 +182,7 @@ chmod +x mvnw
 
                         sh '''
 if command -v npm >/dev/null 2>&1; then
+    echo "VITE_GROQ_KEY=$VITE_GROQ_KEY" > .env
     npm ci
     npm run build
 else

@@ -1,13 +1,32 @@
-import { useState } from "react";
+import { useState , useEffect } from "react";
 import Header from "../components/layout/Header";
 import Navbar from "../components/layout/Navbar";
 import SearchBar from "../components/market/SearchBar";
 import TopMovers from "../components/market/TopMovers";
 import MarketTable from "../components/market/MarketTable";
+import AIMarketScanner from "../components/market/AIMarketScanner";
+import { getMarketStocks } from "../api/marketApi";
 
 const Market = ({ theme, onToggleTheme }) => {
+  const [marketData,setMarketData] = useState([]);
   const [search, setSearch] = useState("");
+useEffect(()=>{
 
+
+getMarketStocks()
+.then(res=>{
+
+setMarketData(res.data);
+
+})
+.catch(error=>{
+
+console.log(error);
+
+});
+
+
+},[]);
   return (
     <div className="page-shell min-h-screen bg-[#121018] text-white">
       <Header
@@ -32,6 +51,10 @@ const Market = ({ theme, onToggleTheme }) => {
         />
 
         <TopMovers />
+        <AIMarketScanner
+ marketData={marketData}
+/>
+
 
         <MarketTable search={search} />
       </div>
