@@ -161,8 +161,29 @@ body {
 
 .ai-markdown {
 	color: var(--text-primary);
+	font-size: 0.96rem;
+	line-height: 1.65;
 }
 
 .ai-markdown :where(p, li, h1, h2, h3, h4, h5, h6, strong, em, blockquote, code, a) {
 	color: var(--text-primary);
+}
+
+.ai-markdown.prose {
+	--tw-prose-body: var(--text-primary);
+	--tw-prose-headings: var(--text-primary);
+	--tw-prose-lead: var(--text-muted);
+	--tw-prose-links: var(--accent);
+	--tw-prose-bold: var(--text-primary);
+	--tw-prose-counters: var(--text-muted);
+	--tw-prose-bullets: var(--text-muted);
+	--tw-prose-hr: var(--border);
+	--tw-prose-quotes: var(--text-primary);
+	--tw-prose-quote-borders: var(--border);
+	--tw-prose-captions: var(--text-muted);
+	--tw-prose-code: var(--text-primary);
+	--tw-prose-pre-code: var(--text-primary);
+	--tw-prose-pre-bg: var(--surface-3);
+	--tw-prose-th-borders: var(--border);
+	--tw-prose-td-borders: var(--border);
 }

@@ -75,7 +75,6 @@ items-center
 text-xl
 font-semibold
 theme-primary-text
-text-white
 ">
 
 🤖 AI Market Scanner
@@ -123,9 +122,8 @@ mt-5
 bg-[#241C30]
 rounded-xl
 p-5
-text-gray-300
+theme-primary-text
 prose
-prose-invert
 max-w-none
 ">
 
