@@ -27,9 +27,9 @@ pipeline {
 
                     def workDir = "repo-${env.BUILD_NUMBER}-${UUID.randomUUID().toString().substring(0, 8)}"
 
-                    def repoUrl = env.REPO_URL.trim()
-                    def branch = env.REPO_BRANCH.trim()
-                    def credentialsId = env.REPO_CREDENTIALS_ID.trim()
+                    def repoUrl = env.REPO_URL?.trim()
+                    def branch = env.REPO_BRANCH?.trim()
+                    def credentialsId = env.REPO_CREDENTIALS_ID?.trim()
 
 
                     sh "rm -rf '${workDir}' 2>/dev/null || true"
