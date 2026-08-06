@@ -1,8 +1,4 @@
-<div align="center">
-
-# 📈 Portfolio Manager
-
-**A full-stack financial asset tracking and portfolio analytics platform.**
+# 📈 EquityFlow Portfolio Manager
 
 [![Java](https://img.shields.io/badge/Java-17-orange.svg?style=for-the-badge&logo=openjdk)](https://www.oracle.com/java/)
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-4.1.0-6DB33F.svg?style=for-the-badge&logo=springboot)](https://spring.io/projects/spring-boot)
@@ -12,137 +8,125 @@
 [![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1.svg?style=for-the-badge&logo=mysql)](https://www.mysql.com/)
 [![Docker](https://img.shields.io/badge/Docker-24.0%2B-2496ED.svg?style=for-the-badge&logo=docker)](https://www.docker.com/)
 [![Jenkins](https://img.shields.io/badge/Jenkins-CI%2FCD-D24939.svg?style=for-the-badge&logo=jenkins)](https://www.jenkins.io/)
-[![OpenAPI](https://img.shields.io/badge/OpenAPI-3.0-85EA2D.svg?style=for-the-badge&logo=openapi-initiative)](https://swagger.io/)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](LICENSE)
 
----
-
-</div>
-
-## 📌 Table of Contents
-- [Executive Overview](#-executive-overview)
-- [Key Architectural Features](#-key-architectural-features)
-- [Functional Modules](#-functional-modules)
-- [Technology Stack](#-technology-stack)
-- [System Architecture](#-system-architecture)
-- [Project Structure](#-project-structure)
-- [Database Schema & Data Model](#-database-schema--data-model)
-- [API Specification](#-api-specification)
-- [Error Handling Strategy](#-error-handling-strategy)
-- [Docker Support & Containerization](#-docker-support--containerization)
-- [Continuous Integration & Delivery (Jenkins)](#-continuous-integration--delivery-jenkins)
-- [Configuration Reference (`application.properties`)](#-configuration-reference-applicationproperties)
-- [Installation & Local Setup](#-installation--local-setup)
-- [Installation & Local Setup](#-installation--local-setup)
-- [Configuration Reference](#-configuration-reference)
-- [Testing & Quality Assurance](#-testing--quality-assurance)
-- [UI Screenshots](#-ui-screenshots)
-- [Engineering Roadmap](#-engineering-roadmap)
-- [Contributors & Credits](#-contributors--credits)
-- [License](#-license)
+An enterprise-grade, full-stack financial asset tracking, portfolio analytics, and market monitoring platform built by team **Runtime Rangers**. The system provides real-time portfolio performance insights, sector allocation breakdowns, automated top gainers/losers market feeds, and AI-powered investment advisory insights.
 
 ---
 
-## 💡 Executive Overview
+## 💡 Project Overview
 
-### Project Context
-**Portfolio Manager** is a high-performance full-stack web application built to eliminate manual portfolio monitoring and financial data aggregation overhead for individual and institutional investors.
+### What the Project Does
+**EquityFlow Portfolio Manager** is a comprehensive financial web application designed to help retail and institutional investors track, manage, and analyze stock holdings across diverse asset classes and market sectors. It presents an intuitive dashboard for monitoring investment performance, cost bases, profit/loss margins, and asset concentration.
 
-### Core Problem Solved
-Managing equity portfolios across multiple sectors requires tracking volatile market valuations, computing weighted asset distributions, calculating cost-basis vs. current market value, and monitoring top-performing or underperforming assets. Portfolio Manager automates these calculations by providing real-time financial metrics, aggregated sector weightings, position allocation percentages, and automated market mover analytics.
+### The Problem It Solves
+Managing stock investments across multiple exchanges (NASDAQ, NYSE, NSE, Crypto) often involves manual spreadsheet tracking, complex gain/loss math, and fragmented market research. Portfolio Manager solves these pain points by:
+- Automating cost basis vs. current valuation calculations in real time.
+- Calculating portfolio sector weightings dynamically using SQL aggregations.
+- Identifying top market movers (gainers and losers) instantaneously.
+- Providing AI-driven portfolio recommendations (Buy/Sell/Hold advice) via Groq LLM integration.
 
-### Strategic Goals
-- **Real-time Financial Analytics**: Instant calculation of total capital invested, current market portfolio value, net unrealized gain/loss, and rate of return.
-- **Dynamic Asset Allocation**: Interactive visualization of equity weightings and sector concentration via Recharts pie charts.
-- **Lightweight & High-Throughput Backend**: Spring Data JDBC with raw `JdbcTemplate` execution for minimum ORM overhead and predictable SQL performance.
-- **Contract-First OpenAPI Specs**: Self-documenting REST APIs exposed via Swagger UI for seamless front-end and third-party integrations.
+### Purpose and Goals
+- **Financial Metrics**: Instant access to total capital invested, current market valuation, total gain/loss, and net rate of return percentage.
+- **Data-Driven Asset Allocation**: Interactive visualization of stock weightings and sector concentration via Recharts charts.
+- **High-Throughput Lightweight Backend**: Spring Boot 4.1 using Spring Data JDBC (`JdbcTemplate`) for low ORM overhead and high execution performance.
+- **Enterprise DevOps Pipeline**: Multi-stage Docker containerization and automated Jenkins CI/CD integration.
 
 ---
 
-## ⚡ Key Architectural Features
+## ⚡ Key Features
 
-- 📊 **Portfolio Valuation Engine**: Computes total invested value, current market valuation, net profit/loss, and portfolio return rate on the fly.
-- 🥧 **Asset Weighting & Sector Breakdown**: Dynamic SQL aggregation queries compute exact percentage allocation by stock holding and industry sector.
-- 📈 **Market Mover Widgets**: Optimized SQL sorting routines (`ORDER BY change_percent`) to fetch top 5 gainers and top 5 losers.
-- 🛡️ **Centralized Resilience & Exception Handling**: `@RestControllerAdvice` intercepts database exceptions, invalid JSON payloads, and illegal arguments to output uniform RFC 7807-compliant error payloads.
-- 🐳 **Containerized Microservices Stack**: Production-ready multi-stage Dockerfiles and Docker Compose setup for unified one-command orchestration.
-- 🔄 **Automated CI/CD Pipeline**: Declarative `Jenkinsfile` orchestrating automated checkout, compilation, linting, Docker image builds, and container deployment.
-- 🚀 **Modern Reactive-Ready UI**: Single-page application (SPA) built with React 19, TailwindCSS 4 dark theme, and Vite build system.
-- 🔄 **Self-Bootstrapping Relational Persistence**: Automatic execution of `schema.sql` and `data.sql` DDL/DML scripts on Spring Boot initialization (`spring.sql.init.mode=always`).
-- 🚀 **Modern Reactive-Ready UI**: Single-page application (SPA) built with React 19, TailwindCSS 4 dark theme, and Vite build system.
-- 🔄 **Self-Bootstrapping Relational Persistence**: Automatic execution of `schema.sql` and `data.sql` DDL/DML scripts on Spring Boot initialization.
+- 📊 **Real-Time Portfolio Valuation Engine**: Automatically calculates net capital invested, current total market value, net gain/loss, and return percentage (`growthPercentage`).
+- 🥧 **Dynamic Asset & Sector Allocation**: Computes exact percentage concentration per holding and sector using SQL `GROUP BY` and aggregation queries.
+- 📈 **Market Movers Feed**: Real-time ranking of top 5 gainers and top 5 losers sorted by change percentage (`change_percent`).
+- 🤖 **AI Financial Advisor & Market Scanner**: Integrates with Groq LLM API (`llama-3.3-70b-versatile`) to generate concise, professional Buy/Sell/Hold insights for holdings and market stocks.
+- 💼 **Position Management**: Supports buying new stock positions, updating existing position quantities, and selling/deleting holdings.
+- 🛡️ **Centralized Global Exception Handling**: `@RestControllerAdvice` intercepts validation failures, malformed JSON inputs, resource missing cases, and database errors to return structured HTTP error payloads.
+- 🐳 **Full Dockerization**: Multi-stage `Dockerfile` and `docker-compose.yml` orchestrating MySQL 8.0, Spring Boot backend, and Nginx React frontend.
+- 🔄 **Automated CI/CD Pipeline**: Declarative `Jenkinsfile` automating code checkout, backend testing with H2, JAR packaging, frontend build validation, environment setup, container deployment, and health checks.
+- 📖 **Interactive OpenAPI Docs**: Integrated Swagger UI via `springdoc-openapi` for API exploration and testing.
 
 ---
 
 ## 🧩 Functional Modules
 
-```
-                    ┌─────────────────────────────────────────┐
-                    │          Portfolio Manager App          │
-                    └────────────────────┬────────────────────┘
-                                         │
-        ┌────────────────────────────────┼────────────────────────────────┐
-        ▼                                ▼                                ▼
-┌──────────────────────┐      ┌──────────────────────┐      ┌──────────────────────┐
-│    Market Module     │      │   Holding Module     │      │   Analytics & UI     │
-├──────────────────────┤      ├──────────────────────┤      ├──────────────────────┤
-│ - Stock Master Data  │      │ - Add/Delete Holding │      │ - Real-time KPI Cards│
-│ - Top Gainers Feed   │      │ - Allocation Engine  │      │ - Portfolio Pie Chart│
-│ - Top Losers Feed    │      │ - Sector Distribution│      │ - Sector Pie Chart   │
-│ - Market Search      │      │ - Portfolio Summary  │      │ - Interactive Tables │
-└──────────────────────┘      └──────────────────────┘      └──────────────────────┘
-```
-
 ### 1. Market Module (`com.neueda.portfolio_manager.controller.MarketController`)
-- **Responsibilities**: Manages master market securities (ticker, company, exchange, sector, current price, change percentage).
-- **Core Endpoints**:
-    - `GET /api/market`: Returns full catalog of market securities.
-    - `GET /api/market/gainers`: Returns top 5 stocks sorted by highest positive price change percentage.
-    - `GET /api/market/losers`: Returns top 5 stocks sorted by highest negative price change percentage.
+- **Purpose**: Exposes endpoints to retrieve master stock catalog data and analytics on market movers.
+- **Responsibilities**: Interface between the frontend client and the market data repository.
+- **Main Functionalities**:
+    - Retrieve complete list of available market stocks (`GET /api/market`).
+    - Fetch top 5 gainers ordered by positive change percentage (`GET /api/market/gainers`).
+    - Fetch top 5 losers ordered by negative change percentage (`GET /api/market/losers`).
 
 ### 2. Holding & Portfolio Module (`com.neueda.portfolio_manager.controller.HoldingController`)
-- **Responsibilities**: Manages user investment positions, calculates portfolio cost basis, market valuation, asset allocation, and sector exposure.
-- **Core Endpoints**:
-    - `POST /api/holdings`: Inserts a new holding position (market ID, quantity, purchase price, purchase date).
-    - `DELETE /api/holdings/{id}`: Liquidation/removal of a portfolio holding position by primary key ID.
-    - `GET /api/portfolio/allocation`: Computes holding-level allocation percentage and gain/loss metrics.
-    - `GET /api/portfolio/sectors`: Computes sector-level aggregated quantity, invested value, current value, and percentage exposure.
-    - `GET /api/portfolio/summary`: Aggregates total invested value, total current market value, and net gain/loss.
+- **Purpose**: Manages user stock holdings and generates aggregated portfolio performance metrics.
+- **Responsibilities**: Handles transactions (buy/update/delete holdings) and computes financial position metrics.
+- **Main Functionalities**:
+    - Add a new stock holding (`POST /api/holdings`).
+    - Update holding quantity by ID (`PUT /api/holdings/{id}`).
+    - Update holding quantity by Market ID (`PUT /api/holding/market/{marketId}`).
+    - Remove a stock holding (`DELETE /api/holdings/{id}`).
+    - Retrieve detailed portfolio holding allocations (`GET /api/portfolio/allocation`).
+    - Retrieve sector concentration breakdowns (`GET /api/portfolio/sectors`).
+    - Retrieve portfolio summary statistics (`GET /api/portfolio/summary`).
 
-### 3. Frontend Visualization Module (`frontend/src`)
-- **Responsibilities**: User dashboard rendering, component-driven UI states, chart animations, and API synchronization.
-- **Pages**:
-    - **Investment Overview (`/`)**: Key performance indicators (KPIs), Portfolio Allocation Chart, Sector Allocation Chart, Holdings Table.
-    - **Market (`/market`)**: Stock Search Bar, Top Gainers / Losers Cards, Interactive Stock Catalog Table.
+### 3. Frontend Client & AI Module (`frontend/src`)
+- **Purpose**: Provides an intuitive dark-themed user interface with interactive charts, tables, search features, and AI insights.
+- **Responsibilities**: Renders UI components, interacts with REST endpoints using Axios, and communicates with the Groq AI API.
+- **Main Functionalities**:
+    - **Dashboard View**: Renders key metric cards (Total Investment, Portfolio Value, Profit/Loss, Return %), pie charts, AI Advisor card, and interactive holdings table with sell flow modals.
+    - **Market View**: Renders stock search bar, top gainers/losers carousel cards, AI Market Scanner, and comprehensive market stock catalog.
 
 ---
 
 ## 🛠️ Technology Stack
 
-| Layer | Technology | Version | Purpose |
+| Category | Technology | Version | Purpose |
 | :--- | :--- | :--- | :--- |
-| **Language** | Java | 17 (LTS) | Core backend programming language. |
-| **Backend Framework** | Spring Boot | 4.1.0 | Microservice foundation, dependency injection, and REST controllers. |
-| **Persistence** | Spring Data JDBC | 4.1.0 Starter | `JdbcTemplate`-based data access without heavy JPA/Hibernate ORM caching overhead. |
-| **Database** | MySQL | 8.0+ | Relational storage for market instruments and holding transactions. |
-| **Database Driver** | MySQL Connector/J | 9.x | Runtime JDBC driver for MySQL connections. |
-| **API Docs** | SpringDoc OpenAPI | 2.8.9 | Automated Swagger UI generation (`/swagger-ui.html`). |
-| **Frontend Framework**| React | 19.1.0 | Declarative UI library for SPA component construction. |
-| **Build Tool (FE)** | Vite | 6.3.5 | Next-generation frontend build engine & HMR dev server. |
-| **Styling** | TailwindCSS | 4.3.3 | Utility-first CSS framework styled with custom dark-mode theme. |
-| **Data Viz** | Recharts | 3.10.1 | SVG-based charting library for animated portfolio pie charts. |
-| **HTTP Client** | Axios | 1.19.0 | Promise-based HTTP client for API requests. |
-| **Routing** | React Router DOM | 7.18.2 | Client-side page routing (`/` and `/market`). |
-| **Icons & UI** | Lucide React / React Icons | 1.28 / 5.7 | Clean vector iconography. |
-| **Containerization** | Docker / Docker Compose | 24.0+ / 3.8 | Multi-stage image builds and full-stack container orchestration. |
-| **CI/CD Automation** | Jenkins Pipeline | Groovy (`Jenkinsfile`) | Automated build, test, lint, image packaging, and deployment pipeline. |
-| **Build Tool (BE)** | Apache Maven | Maven Wrapper | Dependency management and build lifecycle tool. |
+| **Backend Language** | Java | 17 | Core programming language |
+| **Backend Framework** | Spring Boot | 4.1.0 | Microservice web framework |
+| **Data Access** | Spring Data JDBC (`JdbcTemplate`) | 4.1.0 | Lightweight raw SQL data access layer |
+| **Database (Production)** | MySQL | 8.0 | Relational database persistence |
+| **Database (Testing)** | H2 Database | In-Memory | Embedded database for unit/integration tests |
+| **API Documentation** | Springdoc OpenAPI / Swagger | 2.8.9 | Contract-first REST documentation |
+| **Frontend Framework** | React | 19.1.0 | Single-Page Application (SPA) framework |
+| **Frontend Build Tool** | Vite | 6.3.5 | Fast Next-gen frontend tooling |
+| **UI Styling & Icons** | Tailwind CSS / Lucide / React Icons | 4.3.3 | Dark-themed glassmorphism responsive styling |
+| **Data Visualization** | Recharts | 3.10.1 | Interactive charts (Pie/Donut charts) |
+| **AI Integration** | Groq API (`llama-3.3-70b-versatile`) | API v1 | AI portfolio advisor & market scanner |
+| **HTTP Client** | Axios | 1.19.0 | Promise-based HTTP client for API calls |
+| **Containerization** | Docker / Docker Compose | Multi-Stage | Microservices packaging and orchestration |
+| **Web Server / Proxy** | Nginx | Alpine | Frontend SPA production web server |
+| **CI/CD Automation** | Jenkins | Pipeline | Declarative build, test, and deployment automation |
 
 ---
 
-## 🏗️ System Architecture
+## 📐 System Architecture
 
-### Request Processing Flow
+### Component Interaction Flow
+
+```
+User (Browser)
+   │
+   ├─► Client Layer (React 19 SPA) [Port 5173 Dev / Port 8085 Prod]
+   │      │
+   │      ├─► Axios HTTP Client
+   │            │
+   │            ▼  (JSON over HTTP / REST)
+   │
+   ├─► Server Layer (Spring Boot 4.1 REST APIs) [Port 8082]
+   │      │
+   │      ├─► HoldingController / MarketController
+   │      ├─► GlobalExceptionHandler (@RestControllerAdvice)
+   │      ├─► HoldingService / MarketService
+   │      └─► HoldingRepository / MarketRepository (JdbcTemplate)
+   │            │
+   │            ▼  (Raw SQL Queries)
+   │
+   └─► Database Layer (MySQL 8.0) [Port 3306] (Database: portfolio_db)
+```
+
+### Detailed System Architecture Diagram
 
 ```mermaid
 flowchart TD
@@ -150,7 +134,6 @@ flowchart TD
         Dashboard["Dashboard View (Dashboard.jsx)"]
         MarketView["Market View (Market.jsx)"]
         AxiosClient["Axios HTTP Client (Port 5173 / 80)"]
-        AxiosClient["Axios HTTP Client (Port 5173)"]
     end
 
     subgraph Server ["Backend Layer (Spring Boot 4.1)"]
@@ -177,470 +160,359 @@ flowchart TD
     RestController -->|JSON Response| AxiosClient
 ```
 
-### Architectural Layering
-1. **Controller Layer**: Exposes strict REST endpoints, defines OpenAPI Swagger documentation, and validates incoming JSON payloads.
-2. **Service Layer**: Implements domain business logic (e.g., verifying `quantity > 0`, computing portfolio metrics).
-3. **Repository Layer**: Uses Spring `JdbcTemplate` to execute optimized SQL statements and map SQL `ResultSet` rows into domain objects (`Holding`, `Market`, `HoldingAllocation`, `SectorAllocation`).
-4. **Database Layer**: Enforces referential integrity using foreign keys (`holding.market_id` → `market.id`).
-
 ---
 
-## 📂 Project Structure
+## 📁 Project Structure
 
 ```
-106-Portfolio-Manager-Runtime-Rangers-main
-├── Jenkinsfile                                # Declarative Jenkins CI/CD Pipeline Script
-├── docker-compose.yml                         # Multi-container Docker Compose Orchestration File
-├── backend                                    # Spring Boot Backend Project
-│   ├── Dockerfile                             # Multi-stage Maven/JDK 17 Dockerfile
-├── backend                                    # Spring Boot Backend Project
-│   ├── .mvn/                                  # Maven Wrapper Binaries
-│   ├── mvnw                                   # Maven Wrapper (Linux/macOS)
-│   ├── mvnw.cmd                               # Maven Wrapper (Windows)
-│   ├── pom.xml                                # Maven Dependencies & Build Configuration
+.
+├── Dockerfile                         # Multi-stage Docker build script for backend & frontend
+├── docker-compose.yml                 # Multi-container orchestration (MySQL, Backend, Frontend)
+├── Jenkinsfile                        # Declarative Jenkins CI/CD pipeline script
+├── README.md                          # Project documentation
+│
+├── backend                            # Spring Boot Java Backend
+│   ├── pom.xml                        # Maven dependencies & build settings
 │   └── src
 │       ├── main
-│       │   ├── java/com/neueda/portfolio_manager
-│       │   │   ├── PortfolioManagerApplication.java   # Spring Boot Main Application Entrypoint
-│       │   │   ├── config
-│       │   │   │   └── SwaggerConfig.java             # OpenAPI / Swagger UI Config Bean
-│       │   │   ├── controller
-│       │   │   │   ├── HoldingController.java         # REST APIs for Portfolio & Holdings
-│       │   │   │   └── MarketController.java          # REST APIs for Market Data & Movers
-│       │   │   ├── entity
-│       │   │   │   ├── Holding.java                   # Holding Domain Model
-│       │   │   │   ├── HoldingAllocation.java         # Holding Projection DTO (Valuation & Allocation %)
-│       │   │   │   ├── Market.java                    # Market Security Domain Model
-│       │   │   │   └── SectorAllocation.java          # Sector Exposure DTO (Valuation & Concentration %)
-│       │   │   ├── exception
-│       │   │   │   ├── BadRequestException.java       # Custom 400 Exception
-│       │   │   │   ├── DuplicateResourceException.java# Custom 409 Exception
-│       │   │   │   ├── GlobalExceptionHandler.java    # Centralized @RestControllerAdvice Error Handler
-│       │   │   │   └── ResourceNotFoundException.java # Custom 404 Exception
-│       │   │   ├── repository
-│       │   │   │   ├── HoldingRepository.java         # JdbcTemplate Repository for Holdings & Analytics
-│       │   │   │   └── MarketRepository.java          # JdbcTemplate Repository for Market Securities
-│       │   │   └── service
-│       │   │       ├── HoldingService.java            # Business Logic for Holding Operations
-│       │   │       └── MarketService.java             # Business Logic for Market Operations
+│       │   ├── java
+│       │   │   └── com/neueda/portfolio_manager
+│       │   │       ├── PortfolioManagerApplication.java
+│       │   │       ├── controller     # REST Controllers handling HTTP requests
+│       │   │       │   ├── HoldingController.java
+│       │   │       │   └── MarketController.java
+│       │   │       ├── entity         # Data Models & DTOs
+│       │   │       │   ├── Holding.java
+│       │   │       │   ├── HoldingAllocation.java
+│       │   │       │   ├── Market.java
+│       │   │       │   └── SectorAllocation.java
+│       │   │       ├── exception      # Global Exception Handling & custom exceptions
+│       │   │       │   ├── BadRequestException.java
+│       │   │       │   ├── DuplicateResourceException.java
+│       │   │       │   ├── GlobalExceptionHandler.java
+│       │   │       │   └── ResourceNotFoundException.java
+│       │   │       ├── repository     # Spring Data JDBC Repositories (JdbcTemplate)
+│       │   │       │   ├── HoldingRepository.java
+│       │   │       │   └── MarketRepository.java
+│       │   │       └── service        # Business Logic Layer
+│       │   │           ├── HoldingService.java
+│       │   │           └── MarketService.java
 │       │   └── resources
-│       │       ├── application.properties             # Spring & Datasource Configurations
-│       │       ├── data.sql                           # Seed Script for Market & Holding Tables
-│       │       └── schema.sql                         # Database Creation & DDL Schema Script
-│       └── test
+│       │       ├── application.properties      # Base Spring Boot properties
+│       │       ├── application-dev.properties  # Development environment properties (MySQL)
+│       │       ├── application-test.properties # Testing environment properties (H2 DB)
+│       │       ├── schema.sql                  # Database table definitions
+│       │       └── data.sql                    # Initial seed dataset
+│       └── test                       # Unit and Integration Tests
 │           └── java/com/neueda/portfolio_manager
-│               └── PortfolioManagerApplicationTests.java # Context Loading Unit Tests
-└── frontend                                   # React 19 + Vite Frontend Project
-    ├── Dockerfile                             # Multi-stage Node/Nginx Alpine Dockerfile
-    ├── eslint.config.js                       # ESLint Configuration
-    ├── index.html                             # HTML5 Root Container
-    ├── package.json                           # Frontend Dependencies & NPM Scripts
-    ├── vite.config.js                         # Vite Bundler Settings
+│               ├── PortfolioManagerApplicationTests.java
+│               ├── controller
+│               │   ├── HoldingControllerTest.java
+│               │   └── MarketControllerTest.java
+│               ├── repository
+│               │   ├── HoldingRepositoryTest.java
+│               │   └── MarketRepositoryTest.java
+│               └── service
+│                   ├── HoldingServiceTest.java
+│                   └── MarketServiceTest.java
+│
+└── frontend                           # React 19 Frontend SPA
+    ├── package.json                   # NPM dependencies and scripts
+    ├── vite.config.js                 # Vite bundler configuration
+    ├── nginx.conf                     # Nginx Web Server configuration for production
+    ├── index.html                     # HTML5 Entry point
     └── src
-        ├── App.css                            # Core App Styles
-        ├── App.jsx                            # React Router Root Switch
-        ├── main.jsx                           # React DOM Root Mounting Script
-        ├── index.css                          # Tailwind CSS Directives & Global Theme
-        ├── Pages
-        │   ├── Dashboard.jsx                  # Investment Overview Dashboard Page
-        │   └── Market.jsx                     # Market Explorer Page
-        ├── components
-        │   ├── dashboard
-        │   │   ├── ChartCard.jsx              # Reusable Wrapper for Recharts Cards
-        │   │   ├── HoldingTable.jsx           # Portfolio Holdings Data Table Component
-        │   │   ├── PortfolioAllocation.jsx    # Holding Allocation Pie Chart Component
-        │   │   ├── SectorAllocation.jsx       # Sector Breakdown Pie Chart Component
-        │   │   └── SummaryCard.jsx            # Financial Summary Stat KPI Widget
-        │   ├── layout
-        │   │   ├── Header.jsx                 # Application Top Header Bar
-        │   │   └── Navbar.jsx                 # Main Navigation Bar
-        │   └── market
-        │       ├── MarketTable.jsx            # Stock Market Data Catalog Table
-        │       ├── SearchBar.jsx              # Stock Search Filter Component
-        │       └── TopMovers.jsx              # Top Gainers / Losers Widget Cards
-        └── mock
-            ├── dashboard.js                   # Mock Holding Backup Data
-            └── market.js                      # Mock Market Backup Data
+        ├── main.jsx                   # React application entry point
+        ├── App.jsx                    # Core layout router component
+        ├── api                        # Axios API integration modules
+        │   ├── aiApi.js               # Groq LLM integration
+        │   ├── axiosInstance.js       # Base Axios instance with baseURL
+        │   ├── holdingApi.js          # Holding API calls
+        │   ├── marketApi.js           # Market API calls
+        │   └── portfolioApi.js        # Portfolio API calls
+        ├── components                 # Modular React UI components
+        │   ├── dashboard              # Summary cards, pie charts, holdings table, AI advisor
+        │   ├── layout                 # Header and Navbar navigation
+        │   └── market                 # Search bar, top movers, market table, AI scanner
+        └── Pages                      # Top-level routes
+            ├── Dashboard.jsx          # Investment overview page
+            └── Market.jsx             # Stock market research page
 ```
+
+### Package Descriptions
+- `controller`: Handles incoming HTTP requests, maps REST endpoints, validates input payloads, and returns `ResponseEntity` JSON responses.
+- `service`: Contains business logic, validation rules, portfolio calculation algorithms, and delegates database operations to repositories.
+- `repository`: Implements data persistence using `JdbcTemplate` to execute SQL queries directly against MySQL/H2 databases.
+- `entity`: Represents database tables (`Market`, `Holding`) and analytical data transfer objects (`HoldingAllocation`, `SectorAllocation`).
+- `exception`: Provides centralized `@RestControllerAdvice` error handling, returning clean HTTP status codes and error JSON structures.
 
 ---
 
-## 🗄️ Database Schema & Data Model
+## 🗄️ Database Design
 
-### Entity-Relationship Diagram
+### Relational Schema Diagram
 
-```mermaid
-erDiagram
-    MARKET ||--o{ HOLDING : "contains"
-    
-    MARKET {
-        int id PK "AUTO_INCREMENT"
-        string symbol UK "VARCHAR(10), NOT NULL"
-        string company_name "VARCHAR(100), NOT NULL"
-        string exchange "VARCHAR(50)"
-        string sector "VARCHAR(50)"
-        decimal current_price "DECIMAL(10,2)"
-        decimal change_percent "DECIMAL(6,2)"
-    }
-    
-    HOLDING {
-        int id PK "AUTO_INCREMENT"
-        int market_id FK "NOT NULL -> market(id)"
-        int quantity "NOT NULL"
-        decimal purchase_price "DECIMAL(10,2)"
-        date purchase_date "DATE"
-    }
+```
+       +-----------------------+              +-----------------------+
+       |        market         |              |        holding        |
+       +-----------------------+              +-----------------------+
+       | PK  id (INT)          |<------------| PK  id (INT)          |
+       |     symbol (VARCHAR)  | 1          * | FK  market_id (INT)   |
+       |     company_name (VC) |              |     quantity (INT)    |
+       |     exchange (VARCHAR)|              |     purchase_price(DEC|
+       |     sector (VARCHAR)  |              |     purchase_date(DT) |
+       |     current_price(DEC)|              +-----------------------+
+       |     change_percent(DEC|
+       +-----------------------+
 ```
 
-### Table Definitions & Constraints
+### Table Definitions
 
 #### 1. `market` Table
-Stores security metadata and current price movements.
-```sql
-CREATE TABLE IF NOT EXISTS market (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    symbol VARCHAR(10) NOT NULL UNIQUE,
-    company_name VARCHAR(100) NOT NULL,
-    exchange VARCHAR(50),
-    sector VARCHAR(50),
-    current_price DECIMAL(10,2),
-    change_percent DECIMAL(6,2) DEFAULT 0
-);
-```
+Stores master data for tracked securities and stocks.
+
+| Column | Type | Constraints | Description |
+| :--- | :--- | :--- | :--- |
+| `id` | `INT` | `PRIMARY KEY, AUTO_INCREMENT` | Unique identifier for market security |
+| `symbol` | `VARCHAR(10)` | `NOT NULL, UNIQUE` | Stock ticker symbol (e.g., AAPL, TSLA, BTC) |
+| `company_name` | `VARCHAR(100)`| `NOT NULL` | Full company name |
+| `exchange` | `VARCHAR(50)` | `NULLABLE` | Listing exchange (NASDAQ, NYSE, CRYPTO, NSE) |
+| `sector` | `VARCHAR(50)` | `NULLABLE` | Industry sector (Technology, Automotive, ETF, etc.) |
+| `current_price`| `DECIMAL(10,2)`| `NULLABLE` | Latest market price per unit |
+| `change_percent`|`DECIMAL(6,2)` | `DEFAULT 0` | Percentage price change for top movers tracking |
 
 #### 2. `holding` Table
-Stores individual stock acquisition transactions linked to a market instrument.
-```sql
-CREATE TABLE IF NOT EXISTS holding (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    market_id INT NOT NULL,
-    quantity INT NOT NULL,
-    purchase_price DECIMAL(10,2),
-    purchase_date DATE,
-    CONSTRAINT fk_holding_market FOREIGN KEY (market_id) REFERENCES market(id)
-);
-```
+Stores user portfolio positions linked to market securities.
+
+| Column | Type | Constraints | Description |
+| :--- | :--- | :--- | :--- |
+| `id` | `INT` | `PRIMARY KEY, AUTO_INCREMENT` | Unique identifier for holding position |
+| `market_id` | `INT` | `NOT NULL, FK -> market(id)` | Foreign key linking to the `market` table |
+| `quantity` | `INT` | `NOT NULL` | Number of shares/units owned |
+| `purchase_price`|`DECIMAL(10,2)`| `NULLABLE` | Price per unit at purchase |
+| `purchase_date` |`DATE` | `NULLABLE` | Date of acquisition |
+
+### Foreign Key Constraints
+- `fk_holding_market`: `holding.market_id` references `market.id`.
+
+### Database Initialization
+- `schema.sql`: Drops existing tables if present and recreates `market` and `holding` tables.
+- `data.sql`: Seeds 14 initial market stocks (AAPL, TSLA, MSFT, AMZN, GOOGL, BTC, ETH, VOO, SIP500, JPM, GOLDETF, BND, NVDA, HDFCBANK) and 13 sample portfolio holdings across profit and loss scenarios.
+- Controlled in `application.properties` via `spring.sql.init.mode=always`.
 
 ---
 
-## 📡 API Specification
+## 📡 API Documentation
 
-### Portfolio & Holding Endpoints (`/api`)
+All REST APIs are exposed under the `/api` prefix.
 
-#### 1. Get Portfolio Summary
-- **Endpoint**: `GET /api/portfolio/summary`
-- **Description**: Returns overall portfolio investment totals, current market value, and net unrealized profit/loss.
-- **Response (`200 OK`)**:
-  ```json
-  {
-    "totalInvestedValue": 6424.0,
-    "totalCurrentValue": 7323.5,
-    "totalGainLoss": 899.5
-  }
-  ```
+| HTTP Method | Endpoint | Description | Request Body / Parameters | Response Status & Body |
+| :--- | :--- | :--- | :--- | :--- |
+| `GET` | `/api/market` | Retrieve complete list of market stocks | None | `200 OK` - Array of `Market` objects |
+| `GET` | `/api/market/gainers` | Retrieve top 5 market gainers | None | `200 OK` - Top 5 `Market` objects sorted by `change_percent DESC` |
+| `GET` | `/api/market/losers` | Retrieve top 5 market losers | None | `200 OK` - Top 5 `Market` objects sorted by `change_percent ASC` |
+| `POST` | `/api/holdings` | Create a new stock holding | JSON: `{ "marketId": 1, "quantity": 10, "purchasePrice": 180.00, "purchaseDate": "2026-01-15" }` | `201 Created` - Created `Holding` object |
+| `PUT` | `/api/holdings/{id}` | Update holding position by Holding ID | Path: `id` (int)<br/>JSON: `{ "marketId": 1, "quantity": 5, "purchasePrice": 180.00, "purchaseDate": "2026-01-15" }` | `204 No Content` on success<br/>`404 Not Found` if ID does not exist |
+| `PUT` | `/api/holding/market/{marketId}` | Update holding position by Market ID | Path: `marketId` (int)<br/>JSON: `{ "quantity": 15, "purchasePrice": 180.00, "purchaseDate": "2026-01-15" }` | `204 No Content` on success<br/>`404 Not Found` if position does not exist |
+| `DELETE` | `/api/holdings/{id}` | Delete holding position by Holding ID | Path: `id` (int) | `204 No Content` on success<br/>`400 Bad Request` / `404 Not Found` if missing |
+| `GET` | `/api/portfolio/allocation` | Retrieve detailed holding allocations | None | `200 OK` - Array of `HoldingAllocation` (invested, current value, gain/loss, allocation %) |
+| `GET` | `/api/portfolio/sectors` | Retrieve sector allocation breakdown | None | `200 OK` - Array of `SectorAllocation` (total quantity, invested value, current value, sector %) |
+| `GET` | `/api/portfolio/summary` | Retrieve overall portfolio summary KPIs | None | `200 OK` - `{ "totalInvestedValue": 15000.0, "totalCurrentValue": 17500.0, "totalGainLoss": 2500.0, "growthPercentage": 16.67 }` |
 
-#### 2. Get Portfolio Allocation
-- **Endpoint**: `GET /api/portfolio/allocation`
-- **Description**: Returns allocation breakdown per holding including quantity, cost basis, current valuation, unrealized gain/loss, and portfolio allocation percentage.
-- **Response (`200 OK`)**:
-  ```json
-  [
-    {
-      "holdingId": 3,
-      "marketId": 3,
-      "symbol": "MSFT",
-      "companyName": "Microsoft Corporation",
-      "sector": "Technology",
-      "quantity": 8,
-      "purchasePrice": 390.5,
-      "currentPrice": 420.75,
-      "investedValue": 3124.0,
-      "currentValue": 3366.0,
-      "gainLoss": 242.0,
-      "allocationPercentage": 45.96
-    },
-    {
-      "holdingId": 1,
-      "marketId": 1,
-      "symbol": "AAPL",
-      "companyName": "Apple Inc",
-      "sector": "Technology",
-      "quantity": 10,
-      "purchasePrice": 180.0,
-      "currentPrice": 220.5,
-      "investedValue": 1800.0,
-      "currentValue": 2205.0,
-      "gainLoss": 405.0,
-      "allocationPercentage": 30.11
-    }
-  ]
-  ```
-
-#### 3. Get Sector Allocation
-- **Endpoint**: `GET /api/portfolio/sectors`
-- **Description**: Returns portfolio concentration aggregated by industry sector.
-- **Response (`200 OK`)**:
-  ```json
-  [
-    {
-      "sector": "Technology",
-      "totalQuantity": 18,
-      "investedValue": 4924.0,
-      "currentValue": 5571.0,
-      "allocationPercentage": 76.07
-    },
-    {
-      "sector": "Automotive",
-      "totalQuantity": 5,
-      "investedValue": 1500.0,
-      "currentValue": 1751.0,
-      "allocationPercentage": 23.93
-    }
-  ]
-  ```
-
-#### 4. Create Holding Position
-- **Endpoint**: `POST /api/holdings`
-- **Description**: Adds a new stock holding position to the portfolio.
-- **Request Body**:
-  ```json
-  {
-    "marketId": 1,
-    "quantity": 10,
-    "purchasePrice": 180.00,
-    "purchaseDate": "2026-01-15"
-  }
-  ```
-- **Response (`201 Created`)**:
-  ```json
-  {
-    "id": 4,
-    "marketId": 1,
-    "quantity": 10,
-    "purchasePrice": 180.0,
-    "purchaseDate": "2026-01-15"
-  }
-  ```
-
-#### 5. Delete Holding Position
-- **Endpoint**: `DELETE /api/holdings/{id}`
-- **Description**: Deletes a holding by ID.
-- **Response**: `204 No Content`
+### Swagger / OpenAPI Documentation
+When running the backend locally, Swagger UI is available at:
+`http://localhost:8082/swagger-ui/index.html` or `http://localhost:8082/v3/api-docs`
 
 ---
 
-### Market Security Endpoints (`/api/market`)
+## 🐳 Docker & Containerization
 
-#### 1. Get All Markets
-- **Endpoint**: `GET /api/market`
-- **Description**: Returns complete list of available market instruments sorted alphabetically by symbol.
-- **Response (`200 OK`)**:
-  ```json
-  [
-    {
-      "id": 1,
-      "symbol": "AAPL",
-      "companyName": "Apple Inc",
-      "exchange": "NASDAQ",
-      "sector": "Technology",
-      "currentPrice": 220.5,
-      "changePercent": 1.25
-    }
-  ]
-  ```
+The project includes a production-ready multi-stage `Dockerfile` and `docker-compose.yml` configuration.
 
-#### 2. Get Top Gainers
-- **Endpoint**: `GET /api/market/gainers`
-- **Description**: Returns top 5 stock gainers sorted by `change_percent` descending.
-- **Response (`200 OK`)**: `Array<Market>`
+### Network Ports Mapping
 
-#### 3. Get Top Losers
-- **Endpoint**: `GET /api/market/losers`
-- **Description**: Returns top 5 stock losers sorted by `change_percent` ascending.
-- **Response (`200 OK`)**: `Array<Market>`
+| Service | Container Port | Host Port | Protocol | Purpose |
+| :--- | :--- | :--- | :--- | :--- |
+| **MySQL Database** | `3306` | `3306` | TCP / Database | Relational database storage |
+| **Spring Boot Backend** | `8082` | `8082` | HTTP / REST | Backend API service |
+| **React Frontend (Nginx)** | `80` | `8085` | HTTP / Web | Frontend SPA production web server |
+| **Vite Dev Server** | `5173` | `5173` | HTTP / Web | Local development server |
+
+### Multi-Stage Docker Architecture
+1. **Backend Stage**:
+    - `backend-builder`: Uses `maven:3.9.6-eclipse-temurin-17` to compile code and package the Spring Boot JAR with `-DskipTests`.
+    - `backend`: Runtime stage using light `eclipse-temurin:17-jre-alpine`, running under non-root user `pmuser`, with health checks on `http://localhost:8082/api/market`.
+2. **Frontend Stage**:
+    - `frontend-builder`: Uses `node:20-alpine` to install dependencies and execute `npm run build`.
+    - `frontend`: Production Nginx server copying build artifacts to `/usr/share/nginx/html`, exposing port 80 (mapped to host 8085), with SPA fallback configured in `nginx.conf`.
 
 ---
 
-## 🛡️ Error Handling Strategy
+## 🔄 Continuous Integration & Delivery (Jenkins)
 
-The application uses a centralized `@RestControllerAdvice` class (`GlobalExceptionHandler`) to intercept runtime exceptions and generate clean, standardized JSON error responses:
+The repository features a robust declarative `Jenkinsfile` automating end-to-end integration and delivery.
 
-```json
-{
-  "status": 400,
-  "error": "Bad Request",
-  "message": "Quantity must be greater than zero"
-}
-```
-
-| Exception Type | Trigger Condition | HTTP Status Code |
-| :--- | :--- | :--- |
-| `HttpMessageNotReadableException` | Malformed JSON request body | `400 Bad Request` |
-| `IllegalArgumentException` | Invalid method parameter or business rule violation | `400 Bad Request` |
-| `IllegalStateException` | Conflicting entity or invalid state operation | `409 Conflict` |
-| `DataAccessException` | SQL syntax or constraint violation | `500 Internal Server Error` |
-| `Exception` | Unhandled fallback exceptions | `500 Internal Server Error` |
+### Pipeline Stages
+1. **Checkout Source**: Clones specified branch into isolated workspace directory.
+2. **Validate Agent Tooling**: Verifies availability of Git, Docker, and Docker Compose CLI commands on Linux agent.
+3. **Test Backend**: Executes unit tests via `./mvnw -B clean test -Dspring.profiles.active=test` and publishes JUnit XML test reports.
+4. **Build Backend**: Compiles and packages backend executable JAR artifact.
+5. **Validate Frontend**: Runs `npm ci` and `npm run build` validation.
+6. **Prepare Deployment Env**: Dynamically injects database credentials and `VITE_GROQ_KEY` from Jenkins Credentials Manager into `.env`.
+7. **Deploy MySQL**: Spawns MySQL 8.0 container and polls container healthcheck until status is `healthy`.
+8. **Deploy Application**: Builds and starts backend and frontend services using `docker compose up -d --build`.
+9. **Health Check**: Executes `curl -fsS http://localhost:8082/api/market` and `curl -fsS http://localhost:8085/health` to verify runtime health.
 
 ---
 
-## 🚀 Installation & Local Setup
+## ⚙️ Configuration
 
-### Prerequisites
-Before running the application, ensure you have installed:
-- **Java JDK 17+**: `java -version`
-- **Node.js 18+ & npm**: `node -v` and `npm -v`
-- **MySQL 8.0+**: Running locally on port `3306`
-- **Git**: `git --version`
+### Important Configuration Files
 
----
-
-### 1. Clone Repository
-```bash
-git clone https://github.com/RuntimeRangers/Portfolio-Manager.git
-cd 106-Portfolio-Manager-Runtime-Rangers-main
-```
-
----
-
-### 2. Database Setup
-1. Ensure MySQL Server is running on `localhost:3306`.
-2. The Spring Boot application automatically creates the `portfolio_db` database and runs `schema.sql` / `data.sql` on startup.
-3. Default credentials configured in `application.properties`:
-    - **Username**: `root`
-    - **Password**: `n3u3da!`
-
----
-
-### 3. Backend Setup & Run
-
-Navigate to `backend`:
-```bash
-cd backend
-```
-
-Build and run using the Maven Wrapper:
-- **macOS / Linux**:
-  ```bash
-  ./mvnw spring-boot:run
-  ```
-- **Windows (Command Prompt / PowerShell)**:
-  ```cmd
-  mvnw.cmd spring-boot:run
-  ```
-
-Backend services will be live at:
-- **REST API Base URL**: `http://localhost:8080`
-- **Interactive Swagger UI**: `http://localhost:8080/swagger-ui.html`
-- **OpenAPI JSON Docs**: `http://localhost:8080/v3/api-docs`
-
----
-
-### 4. Frontend Setup & Run
-
-Open a separate terminal window and navigate to `frontend`:
-```bash
-cd frontend
-```
-
-Install NPM packages:
-```bash
-npm install
-```
-
-Start the Vite development server:
-```bash
-npm run dev
-```
-
-The React web application will open at:
-- **Local Application UI**: `http://localhost:5173`
-
----
-
-## ⚙️ Configuration Reference
-
-### Backend Settings (`backend/src/main/resources/application.properties`)
-
+#### 1. Backend (`application.properties`)
 ```properties
-# Application Identifier
 spring.application.name=portfolio-manager
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+server.port=8082
+spring.sql.init.mode=always
+spring.datasource.hikari.connection-timeout=30000
+spring.datasource.hikari.initialization-fail-timeout=60000
+```
 
-# MySQL Datasource Connection
-spring.datasource.url=jdbc:mysql://localhost:3306/portfolio_db
+#### 2. Development Profile (`application-dev.properties`)
+```properties
+spring.datasource.url=jdbc:mysql://mysql:3306/portfolio_db
 spring.datasource.username=root
 spring.datasource.password=n3u3da!
-spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
-
-# Database Script Initialization (Executes schema.sql and data.sql)
 spring.sql.init.mode=always
-
-# Web Exception & Static Resource Settings
-spring.mvc.throw-exception-if-no-handler-found=true
-spring.web.resources.add-mappings=false
 ```
 
-### Production Environment Override Table
+#### 3. Test Profile (`application-test.properties`)
+```properties
+spring.datasource.url=jdbc:h2:mem:testdb;MODE=MySQL
+spring.datasource.username=sa
+spring.datasource.password=
+spring.datasource.driver-class-name=org.h2.Driver
+spring.sql.init.mode=never
+```
 
-| Environment Variable | Target Property | Default Value | Description |
+#### 4. Frontend Axios Instance (`axiosInstance.js`)
+Configures base API endpoint targeting the backend REST service:
+```javascript
+import axios from "axios";
+
+const api = axios.create({
+  baseURL: "http://localhost:8082/api",
+});
+
+export default api;
+```
+
+### Environment Variables
+
+| Variable Name | Required | Default Value | Description |
 | :--- | :--- | :--- | :--- |
-| `DB_URL` | `spring.datasource.url` | `jdbc:mysql://localhost:3306/portfolio_db` | JDBC MySQL connection URL. |
-| `DB_USER` | `spring.datasource.username` | `root` | Database username. |
-| `DB_PASS` | `spring.datasource.password` | `n3u3da!` | Database password. |
+| `MYSQL_ROOT_PASSWORD` | No | `n3u3da!` | Root password for MySQL database |
+| `MYSQL_DATABASE` | No | `portfolio_db` | MySQL database name |
+| `MYSQL_USER` | No | `portfolio_user` | MySQL service username |
+| `MYSQL_PASSWORD` | No | `portfolio_password` | MySQL service password |
+| `VITE_GROQ_KEY` | Optional | None | Groq API Key for AI portfolio/market insights |
+| `SPRING_PROFILES_ACTIVE`| No | `dev` | Active Spring profile (`dev` or `test`) |
 
-> [!CAUTION]
-> **Security Advisory**: Never commit plain-text database credentials to public source repositories. Always use environment variable substitution for production deployments.
-
----
-
-## 🧪 Testing & Quality Assurance
-
-### Backend Unit & Integration Tests
-The backend uses **JUnit 5** and **Spring Boot Starter Test**.
-
-Run backend tests:
-```bash
-cd backend
-./mvnw test
-```
-
-### Frontend Code Quality & Linting
-Run ESLint check:
-```bash
-cd frontend
-npm run lint
-```
+> 🔒 **Security Notice**: Never commit sensitive production database passwords or Groq API keys to public source control. Use environment variables or Jenkins Credentials Manager.
 
 ---
 
-## 🖼️ UI Screenshots
+## 💻 Installation and Setup
 
-| Investment Overview Dashboard | Market Mover Analytics |
-| :---: | :---: |
-| ![Dashboard Screenshot](docs/images/dashboard.png) | ![Market Screenshot](docs/images/market.png) |
-
-| Interactive Swagger API Docs |
-| :---: |
-| ![Swagger Screenshot](docs/images/swagger.png) |
-
----
-
-## 🔮 Engineering Roadmap
-
-- [ ] **Spring Security & JWT Authentication**: User registration, login, and tenant isolation.
-- [ ] **Real-Time Stock Ticker Integration**: Integration with external market REST/WebSocket APIs (Alpha Vantage / Finnhub).
-- [ ] **Interactive Buy / Sell Order Flow**: Full UI modal handling instant stock transactions.
-- [ ] **Historical Performance Charts**: Line chart analytics representing portfolio valuation over time (1D, 1M, 1Y, ALL).
-- [ ] **Docker Containerization**: `Dockerfile` and `docker-compose.yml` for unified single-command deployment.
+### Prerequisites
+Ensure the following tools are installed on your machine:
+- **Java JDK 17** or higher
+- **Node.js 20+** and **npm**
+- **MySQL 8.0** server (if running without Docker)
+- **Docker** and **Docker Compose** (for containerized deployment)
 
 ---
 
-## 👥 Contributors & Credits
+### Method 1: Docker Compose Setup (Recommended)
 
-Developed with pride by **Runtime Rangers**:
-- **Neueda Engineering Training Team**
+1. **Clone the Repository**:
+   ```bash
+   git clone https://github.com/Neueda-Learning/106-Portfolio-Manager-Runtime-Rangers.git
+   cd 106-Portfolio-Manager-Runtime-Rangers
+   ```
+
+2. **Set Environment Variables (Optional)**:
+   Create a `.env` file in the project root:
+   ```env
+   MYSQL_ROOT_PASSWORD=n3u3da!
+   MYSQL_DATABASE=portfolio_db
+   MYSQL_USER=portfolio_user
+   MYSQL_PASSWORD=portfolio_password
+   VITE_GROQ_KEY=your_groq_api_key_here
+   ```
+
+3. **Start Containers**:
+   ```bash
+   docker compose up -d --build
+   ```
+
+4. **Verify Container Services**:
+   ```bash
+   docker compose ps
+   ```
+    - **Frontend App**: Accessible at `http://localhost:8085`
+    - **Backend API**: Accessible at `http://localhost:8082/api/market`
+    - **Swagger Docs**: Accessible at `http://localhost:8082/swagger-ui/index.html`
 
 ---
 
-## 📄 License
+### Method 2: Manual Local Setup (Without Docker)
 
-This repository is licensed under the **MIT License**. See the [LICENSE](LICENSE) file for complete details.
+#### 1. Start MySQL Database
+- Create database `portfolio_db`:
+  ```sql
+  CREATE DATABASE portfolio_db;
+  ```
+
+#### 2. Run Backend (Spring Boot)
+1. Navigate to backend directory:
+   ```bash
+   cd backend
+   ```
+2. Build and run using Maven wrapper:
+   ```bash
+   ./mvnw spring-boot:run -Dspring-boot.run.profiles=dev
+   ```
+   Backend starts on `http://localhost:8082`.
+
+#### 3. Run Frontend (React + Vite)
+1. Navigate to frontend directory:
+   ```bash
+   cd frontend
+   ```
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Start Vite development server:
+   ```bash
+   npm run dev
+   ```
+   Frontend starts on `http://localhost:5173`.
+
+---
+
+
+## 👥 Contributors
+
+Developed with ❤️ by team **Runtime Rangers**:
+
+- **Runtime Rangers Engineering Team** (Neueda Software Engineering Program)
+- Technical Stack lead: Backend (Java/Spring Boot), Frontend (React 19), DevOps (Docker & Jenkins).
+
+---
+
+## 📜 License
+
+This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
