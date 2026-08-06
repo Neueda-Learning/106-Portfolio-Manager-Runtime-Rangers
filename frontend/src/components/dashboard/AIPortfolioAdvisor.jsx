@@ -53,6 +53,8 @@ setLoading(false);
 return (
 
 <div className="
+theme-card
+ai-panel
 bg-[#1D1826]
 border border-[#32293F]
 rounded-2xl
@@ -101,6 +103,7 @@ loading
 
 <div
 className="
+ai-markdown
 mt-5
 text-gray-300
 prose

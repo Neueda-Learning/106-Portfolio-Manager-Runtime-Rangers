@@ -182,7 +182,7 @@ chmod +x mvnw
 
                         sh '''
 if command -v npm >/dev/null 2>&1; then
-    echo "VITE_GROQ_KEY=$VITE_GROQ_KEY" > .env
+   
     npm ci
     npm run build
 else
@@ -213,6 +213,7 @@ MYSQL_ROOT_PASSWORD=${env.MYSQL_ROOT_PASSWORD ?: 'n3u3da!'}
 MYSQL_DATABASE=${env.MYSQL_DATABASE ?: 'portfolio_db'}
 MYSQL_USER=${env.MYSQL_USER ?: 'portfolio_user'}
 MYSQL_PASSWORD=${env.MYSQL_PASSWORD ?: 'portfolio_password'}
+VITE_GROQ_KEY=${env.VITE_GROQ_KEY}
 """.trim() + "\n"
 
 
