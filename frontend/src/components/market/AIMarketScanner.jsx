@@ -54,6 +54,8 @@ setLoading(false);
 return (
 
 <div className="
+theme-card
+ai-panel
 bg-[#1D1826]
 border border-[#32293F]
 rounded-2xl
@@ -72,6 +74,7 @@ items-center
 <h2 className="
 text-xl
 font-semibold
+theme-primary-text
 text-white
 ">
 
@@ -114,6 +117,8 @@ loading
 
 
 <div className="
+theme-ai-content
+ai-markdown
 mt-5
 bg-[#241C30]
 rounded-xl

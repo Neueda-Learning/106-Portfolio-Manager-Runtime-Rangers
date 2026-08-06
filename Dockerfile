@@ -37,6 +37,10 @@ FROM node:20-alpine AS frontend-builder
 
 WORKDIR /app/frontend
 
+ARG VITE_GROQ_KEY
+
+ENV VITE_GROQ_KEY=$VITE_GROQ_KEY
+
 COPY frontend/package*.json ./
 
 RUN npm ci --silent

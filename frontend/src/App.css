@@ -148,3 +148,21 @@ body {
 	color: var(--text-primary);
 	border: 1px solid var(--border);
 }
+
+.ai-panel {
+	background: var(--surface-2);
+	border-color: var(--border);
+}
+
+.theme-ai-content {
+	background: var(--surface-3);
+	border: 1px solid var(--border);
+}
+
+.ai-markdown {
+	color: var(--text-primary);
+}
+
+.ai-markdown :where(p, li, h1, h2, h3, h4, h5, h6, strong, em, blockquote, code, a) {
+	color: var(--text-primary);
+}
