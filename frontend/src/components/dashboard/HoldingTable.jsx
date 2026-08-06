@@ -190,6 +190,7 @@ const HoldingsTable = () => {
 
 
     <div className="
+      theme-card holdings-table
       bg-[#1D1826]
       border border-[#32293F]
       rounded-2xl
@@ -201,7 +202,7 @@ const HoldingsTable = () => {
       <table className="w-full">
 
 
-       <thead className="bg-[#241C30] text-[#A8A4B3] text-sm uppercase tracking-wider">
+      <thead className="theme-table-head bg-[#241C30] text-[#A8A4B3] text-sm uppercase tracking-wider">
 
   <tr className="border-b border-[#32293F]">
 
@@ -242,17 +243,17 @@ const HoldingsTable = () => {
 
             <tr
               key={stock.holdingId}
-              className="border-b border-[#32293F]"
+              className="theme-table-row border-b border-[#32293F]"
             >
 
 
               <td className="px-6 py-5">
 
-                <h3 className="font-semibold text-white">
+                <h3 className="theme-primary-text font-semibold text-white">
                   {stock.companyName}
                 </h3>
 
-                <p className="text-sm text-[#A8A4B3]">
+                <p className="theme-muted text-sm text-[#A8A4B3]">
                   {stock.symbol}
                 </p>
 
@@ -359,6 +360,7 @@ const HoldingsTable = () => {
       sellModal && (
 
         <div className="
+          theme-modal-overlay
           fixed inset-0
           bg-black/60
           flex items-center justify-center
@@ -367,6 +369,7 @@ const HoldingsTable = () => {
 
 
           <div className="
+            theme-modal
             bg-[#1D1826]
             border border-[#32293F]
             rounded-2xl
@@ -376,6 +379,7 @@ const HoldingsTable = () => {
 
 
             <h2 className="
+              theme-primary-text
               text-xl
               font-semibold
               text-white
@@ -385,11 +389,11 @@ const HoldingsTable = () => {
 
 
 
-            <p className="text-[#A8A4B3] mt-3">
+            <p className="theme-muted text-[#A8A4B3] mt-3">
 
               Available Quantity:
 
-              <span className="text-white font-semibold ml-2">
+              <span className="theme-primary-text text-white font-semibold ml-2">
                 {sellModal.quantity}
               </span>
 
@@ -410,6 +414,7 @@ const HoldingsTable = () => {
               onChange={(e)=>setSellQuantity(e.target.value)}
 
               className="
+              theme-input
               mt-5
               w-full
               bg-[#241C30]
@@ -436,6 +441,7 @@ const HoldingsTable = () => {
                 onClick={()=>setSellModal(null)}
 
                 className="
+                theme-button-secondary
                 px-4 py-2
                 rounded-xl
                 bg-[#32293F]

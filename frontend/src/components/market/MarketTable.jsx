@@ -235,21 +235,21 @@ const handleSell = async(stock)=>{
   stock.symbol.toLowerCase().includes(search.toLowerCase())
 );
  return (
-    <div className="bg-[#1D1826] border border-[#32293F] rounded-2xl mt-8 overflow-hidden">
+    <div className="theme-card market-table bg-[#1D1826] border border-[#32293F] rounded-2xl mt-8 overflow-hidden">
 
-      <div className="flex items-center justify-between px-6 py-5 border-b border-[#32293F]">
-        <h2 className="text-xl font-semibold text-white">
+      <div className="theme-table-toolbar flex items-center justify-between px-6 py-5 border-b border-[#32293F]">
+        <h2 className="theme-primary-text text-xl font-semibold text-white">
           Market Overview
         </h2>
 
-        <p className="text-sm text-gray-400">
+        <p className="theme-muted text-sm text-gray-400">
           {filteredStocks.length} Stocks
         </p>
       </div>
 
       <table className="w-full">
 
-        <thead className="bg-[#241C30] text-[#A8A4B3]">
+        <thead className="theme-table-head bg-[#241C30] text-[#A8A4B3]">
           <tr>
             <th className="px-6 py-4 text-left">Company</th>
             <th className="text-left">Symbol</th>
@@ -267,11 +267,11 @@ const handleSell = async(stock)=>{
 
             <tr
               key={stock.id}
-              className="border-b border-[#32293F] hover:bg-[#262033] transition"
+              className="theme-table-row border-b border-[#32293F] hover:bg-[#262033] transition"
             >
 
               <td className="px-6 py-5">
-                <h3 className="font-semibold text-white">
+                <h3 className="theme-primary-text font-semibold text-white">
                   {stock.companyName}
                 </h3>
               </td>

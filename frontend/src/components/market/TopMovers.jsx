@@ -36,7 +36,7 @@ useEffect(()=>{
 
       {/* Top Gainers */}
 
-      <div className="bg-[#1D1826] border border-[#32293F] rounded-2xl p-6">
+      <div className="theme-card top-movers-card bg-[#1D1826] border border-[#32293F] rounded-2xl p-6">
 
         <h2 className="text-lg font-semibold text-green-400 mb-4">
           Top Gainers
@@ -49,7 +49,7 @@ useEffect(()=>{
             className="flex justify-between py-2"
           >
 
-            <span className="text-white">
+            <span className="theme-primary-text text-white">
               {stock.symbol}
             </span>
 
@@ -66,7 +66,7 @@ useEffect(()=>{
 
       {/* Top Losers */}
 
-      <div className="bg-[#1D1826] border border-[#32293F] rounded-2xl p-6">
+      <div className="theme-card top-movers-card bg-[#1D1826] border border-[#32293F] rounded-2xl p-6">
 
         <h2 className="text-lg font-semibold text-red-400 mb-4">
           Top Losers
@@ -79,7 +79,7 @@ useEffect(()=>{
             className="flex justify-between py-2"
           >
 
-            <span className="text-white">
+            <span className="theme-primary-text text-white">
               {stock.symbol}
             </span>
 
