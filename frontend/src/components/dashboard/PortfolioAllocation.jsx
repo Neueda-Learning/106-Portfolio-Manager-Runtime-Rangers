@@ -28,7 +28,7 @@ const PortfolioAllocation = () => {
   useEffect(() => {
 
     axios
-      .get("http://localhost:8082/api/portfolio/allocation")
+      .get("http://10.9.77.127:8082/api/portfolio/allocation")
       .then((response) => {
         console.log(response.data);
         setPortfolioData(response.data);
