@@ -28,7 +28,7 @@ pipeline {
 
                     def repoUrl = env.REPO_URL?.trim()
                     def branch = env.REPO_BRANCH?.trim()
-                    def credentialsId = env.REPO_CREDENTIALS_ID?.trim()
+                    def credentialsId = null
 
 
                     sh "rm -rf '${workDir}' 2>/dev/null || true"
