@@ -383,7 +383,7 @@ spring.datasource.hikari.initialization-fail-timeout=60000
 ```properties
 spring.datasource.url=jdbc:mysql://mysql:3306/portfolio_db
 spring.datasource.username=root
-spring.datasource.password=n3u3da!
+spring.datasource.password=password
 spring.sql.init.mode=always
 ```
 
@@ -506,11 +506,9 @@ Ensure the following tools are installed on your machine:
 
 ## 👥 Contributors
 
-Developed with ❤️ by team **Runtime Rangers**:
+Developed with pride by team **Runtime Rangers**:
 
-- **Runtime Rangers Engineering Team** (Neueda Software Engineering Program)
-- Technical Stack lead: Backend (Java/Spring Boot), Frontend (React 19), DevOps (Docker & Jenkins).
-
+- **Runtime Rangers Engineering Team** 
 ---
 
 ## 📜 License
