@@ -1,3 +1,4 @@
+use portfolio_db;
 
 USE portfolio_db;
 
@@ -9,8 +10,6 @@ USE portfolio_db;
 INSERT INTO market
 (symbol, company_name, exchange, sector, current_price, change_percent)
 VALUES
-
--- Existing Records
 
 ('AAPL',
  'Apple Inc',
@@ -39,9 +38,6 @@ VALUES
  'E-Commerce',
  185.30,
  -0.55),
-
-
--- Additional Records
 
 ('GOOGL',
  'Alphabet Inc',
@@ -115,105 +111,107 @@ VALUES
 
 
 
--- ============================
--- HOLDING DATA
--- ============================
 
-INSERT INTO holding
-(
- market_id,
- quantity,
- purchase_price,
- purchase_date
-)
+ -- ============================
+ -- HOLDING DATA
+ -- ============================
 
-VALUES
+ INSERT INTO holding
+ (
+  market_id,
+  quantity,
+  purchase_price,
+  purchase_date
+ )
 
--- Existing Holdings
+ VALUES
 
-(1,
- 10,
- 180.00,
- '2026-01-15'),
-
-(2,
- 5,
- 300.00,
- '2026-02-20'),
-
-(3,
- 8,
- 390.50,
- '2026-03-10'),
+ -- Apple (PROFIT)
+ (1,
+  10,
+  180.00,
+  '2026-01-15'),
 
 
--- Additional Holdings
-
--- Alphabet
-(5,
- 12,
- 150.00,
- '2026-01-25'),
+ -- Tesla (LOSS)
+ (2,
+  5,
+  420.00,
+  '2026-02-20'),
 
 
--- Bitcoin
-(6,
- 1,
- 60000.00,
- '2026-02-05'),
+ -- Microsoft (LOSS)
+ (3,
+  8,
+  450.00,
+  '2026-03-10'),
 
 
--- Ethereum
-(7,
- 3,
- 3000.00,
- '2026-02-18'),
+ -- Alphabet (PROFIT)
+ (5,
+  12,
+  150.00,
+  '2026-01-25'),
 
 
--- Vanguard ETF
-(8,
- 15,
- 490.00,
- '2026-03-01'),
+ -- Bitcoin (LOSS)
+ (6,
+  1,
+  72000.00,
+  '2026-02-05'),
 
 
--- Mutual Fund
-(9,
- 50,
- 220.00,
- '2026-03-15'),
+ -- Ethereum (PROFIT)
+ (7,
+  3,
+  3000.00,
+  '2026-02-18'),
 
 
--- JPMorgan
-(10,
- 20,
- 190.00,
- '2026-04-05'),
+ -- Vanguard S&P 500 ETF (PROFIT)
+ (8,
+  15,
+  490.00,
+  '2026-03-01'),
 
 
--- Gold ETF
-(11,
- 100,
- 65.00,
- '2026-04-20'),
+ -- Mutual Fund (PROFIT)
+ (9,
+  10,
+  220.00,
+  '2026-03-15'),
 
 
--- Bond ETF
-(12,
- 40,
- 70.00,
- '2026-05-10'),
+ -- JPMorgan (PROFIT)
+ (10,
+  20,
+  190.00,
+  '2026-04-05'),
 
 
--- Nvidia
-(13,
- 25,
- 110.00,
- '2026-05-25'),
+ -- Gold ETF (PROFIT)
+ (11,
+  3,
+  65.00,
+  '2026-04-20'),
 
 
--- HDFC Bank
-(14,
- 15,
- 1700.00,
- '2026-06-01');
+ -- Bond ETF (PROFIT)
+ (12,
+  40,
+  70.00,
+  '2026-05-10'),
+
+
+ -- NVIDIA (PROFIT)
+ (13,
+  25,
+  110.00,
+  '2026-05-25'),
+
+
+ -- HDFC Bank (PROFIT)
+ (14,
+  15,
+  1700.00,
+  '2026-06-01');
