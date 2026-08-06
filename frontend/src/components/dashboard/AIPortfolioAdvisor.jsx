@@ -66,7 +66,7 @@ mt-8
 <div className="flex justify-between items-center">
 
 
-<h2 className="text-xl font-semibold text-white">
+<h2 className="text-xl font-semibold theme-primary-text">
 
 🤖 AI Portfolio Advisor
 
@@ -105,9 +105,8 @@ loading
 className="
 ai-markdown
 mt-5
-text-gray-300
+theme-primary-text
 prose
-prose-invert
 max-w-none
 "
 >

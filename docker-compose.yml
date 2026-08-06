@@ -86,6 +86,8 @@ services:
       context: .
       dockerfile: Dockerfile
       target: frontend
+      args:
+        VITE_GROQ_KEY: ${VITE_GROQ_KEY
 
     container_name: portfolio-frontend
     restart: unless-stopped
