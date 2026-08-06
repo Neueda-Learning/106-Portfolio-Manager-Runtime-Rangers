@@ -10,6 +10,8 @@
 [![Vite](https://img.shields.io/badge/Vite-6.3.5-646CFF.svg?style=for-the-badge&logo=vite)](https://vitejs.dev/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.3.3-38B2AC.svg?style=for-the-badge&logo=tailwind-css)](https://tailwindcss.com/)
 [![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1.svg?style=for-the-badge&logo=mysql)](https://www.mysql.com/)
+[![Docker](https://img.shields.io/badge/Docker-24.0%2B-2496ED.svg?style=for-the-badge&logo=docker)](https://www.docker.com/)
+[![Jenkins](https://img.shields.io/badge/Jenkins-CI%2FCD-D24939.svg?style=for-the-badge&logo=jenkins)](https://www.jenkins.io/)
 [![OpenAPI](https://img.shields.io/badge/OpenAPI-3.0-85EA2D.svg?style=for-the-badge&logo=openapi-initiative)](https://swagger.io/)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](LICENSE)
 
@@ -27,6 +29,10 @@
 - [Database Schema & Data Model](#-database-schema--data-model)
 - [API Specification](#-api-specification)
 - [Error Handling Strategy](#-error-handling-strategy)
+- [Docker Support & Containerization](#-docker-support--containerization)
+- [Continuous Integration & Delivery (Jenkins)](#-continuous-integration--delivery-jenkins)
+- [Configuration Reference (`application.properties`)](#-configuration-reference-applicationproperties)
+- [Installation & Local Setup](#-installation--local-setup)
 - [Installation & Local Setup](#-installation--local-setup)
 - [Configuration Reference](#-configuration-reference)
 - [Testing & Quality Assurance](#-testing--quality-assurance)
@@ -59,6 +65,10 @@ Managing equity portfolios across multiple sectors requires tracking volatile ma
 - 🥧 **Asset Weighting & Sector Breakdown**: Dynamic SQL aggregation queries compute exact percentage allocation by stock holding and industry sector.
 - 📈 **Market Mover Widgets**: Optimized SQL sorting routines (`ORDER BY change_percent`) to fetch top 5 gainers and top 5 losers.
 - 🛡️ **Centralized Resilience & Exception Handling**: `@RestControllerAdvice` intercepts database exceptions, invalid JSON payloads, and illegal arguments to output uniform RFC 7807-compliant error payloads.
+- 🐳 **Containerized Microservices Stack**: Production-ready multi-stage Dockerfiles and Docker Compose setup for unified one-command orchestration.
+- 🔄 **Automated CI/CD Pipeline**: Declarative `Jenkinsfile` orchestrating automated checkout, compilation, linting, Docker image builds, and container deployment.
+- 🚀 **Modern Reactive-Ready UI**: Single-page application (SPA) built with React 19, TailwindCSS 4 dark theme, and Vite build system.
+- 🔄 **Self-Bootstrapping Relational Persistence**: Automatic execution of `schema.sql` and `data.sql` DDL/DML scripts on Spring Boot initialization (`spring.sql.init.mode=always`).
 - 🚀 **Modern Reactive-Ready UI**: Single-page application (SPA) built with React 19, TailwindCSS 4 dark theme, and Vite build system.
 - 🔄 **Self-Bootstrapping Relational Persistence**: Automatic execution of `schema.sql` and `data.sql` DDL/DML scripts on Spring Boot initialization.
 
@@ -124,6 +134,8 @@ Managing equity portfolios across multiple sectors requires tracking volatile ma
 | **HTTP Client** | Axios | 1.19.0 | Promise-based HTTP client for API requests. |
 | **Routing** | React Router DOM | 7.18.2 | Client-side page routing (`/` and `/market`). |
 | **Icons & UI** | Lucide React / React Icons | 1.28 / 5.7 | Clean vector iconography. |
+| **Containerization** | Docker / Docker Compose | 24.0+ / 3.8 | Multi-stage image builds and full-stack container orchestration. |
+| **CI/CD Automation** | Jenkins Pipeline | Groovy (`Jenkinsfile`) | Automated build, test, lint, image packaging, and deployment pipeline. |
 | **Build Tool (BE)** | Apache Maven | Maven Wrapper | Dependency management and build lifecycle tool. |
 
 ---
@@ -137,6 +149,7 @@ flowchart TD
     subgraph Client ["Client Layer (React 19 SPA)"]
         Dashboard["Dashboard View (Dashboard.jsx)"]
         MarketView["Market View (Market.jsx)"]
+        AxiosClient["Axios HTTP Client (Port 5173 / 80)"]
         AxiosClient["Axios HTTP Client (Port 5173)"]
     end
 
@@ -176,6 +189,10 @@ flowchart TD
 
 ```
 106-Portfolio-Manager-Runtime-Rangers-main
+├── Jenkinsfile                                # Declarative Jenkins CI/CD Pipeline Script
+├── docker-compose.yml                         # Multi-container Docker Compose Orchestration File
+├── backend                                    # Spring Boot Backend Project
+│   ├── Dockerfile                             # Multi-stage Maven/JDK 17 Dockerfile
 ├── backend                                    # Spring Boot Backend Project
 │   ├── .mvn/                                  # Maven Wrapper Binaries
 │   ├── mvnw                                   # Maven Wrapper (Linux/macOS)
@@ -214,6 +231,7 @@ flowchart TD
 │           └── java/com/neueda/portfolio_manager
 │               └── PortfolioManagerApplicationTests.java # Context Loading Unit Tests
 └── frontend                                   # React 19 + Vite Frontend Project
+    ├── Dockerfile                             # Multi-stage Node/Nginx Alpine Dockerfile
     ├── eslint.config.js                       # ESLint Configuration
     ├── index.html                             # HTML5 Root Container
     ├── package.json                           # Frontend Dependencies & NPM Scripts
