@@ -10,8 +10,14 @@ import {
 } from "../../api/holdingApi";
 import toast from "react-hot-toast";
 
+
 const MarketTable = ({search}) => {
     const [marketData, setMarketData] = useState([]);
+    const [buyModal, setBuyModal] = useState(null);
+const [buyQuantity, setBuyQuantity] = useState(1);
+
+const [sellModal, setSellModal] = useState(null);
+const [sellQuantity, setSellQuantity] = useState(1);
 
   useEffect(()=>{
 
@@ -25,208 +31,255 @@ const MarketTable = ({search}) => {
 
 },[]);
 
-const handleBuy = async(stock)=>{
+const openBuyModal = (stock)=>{
+
+setBuyModal(stock);
+setBuyQuantity(1);
+
+};
+
+
+
+const handleBuyConfirm = async()=>{
+
+
+const buyQty = Number(buyQuantity);
 
 
 try{
 
 
-  
+const response = await getHoldings();
 
-  const response = await getHoldings();
-
-  const holdings = response.data;
-
-
-  const existingStock = holdings.find(
-    item => item.marketId === stock.id
-  );
+const holdings = response.data;
 
 
 
-  if(existingStock){
-
-
-   
-
-    const updatedHolding = {
-
-      id : 1,
-      marketId: existingStock.marketId,
-
-      quantity: existingStock.quantity + 1,
-
-      purchasePrice: existingStock.purchasePrice,
-
-      purchaseDate: existingStock.purchaseDate
-
-    };
-
-
-
-    await updateHolding(
-      existingStock.holdingId,
-      updatedHolding
-    );
-
-
-    toast.success(
-  `${stock.symbol} quantity increased successfully`
+const existingStock = holdings.find(
+item => item.marketId === buyModal.id
 );
 
-  }
-
-  else{
 
 
-   
+if(existingStock){
 
 
-    const holding = {
-      id: 1,
+const updatedHolding={
 
-      marketId: stock.id,
+id: existingStock.holdingId,
 
-      quantity: 1,
+marketId: existingStock.marketId,
 
-      purchasePrice: stock.currentPrice,
+quantity:
+existingStock.quantity + buyQty,
 
-      purchaseDate:
-        new Date()
-        .toISOString()
-        .split("T")[0]
+purchasePrice:
+existingStock.purchasePrice,
 
-    };
+purchaseDate:
+existingStock.purchaseDate
 
-
-
-    await buyStock(holding);
+};
 
 
-  toast.success(
-  `${stock.symbol} bought successfully`
+await updateHolding(
+existingStock.holdingId,
+updatedHolding
 );
 
-  }
+
+}
+
+
+else{
+
+
+const holding={
+
+marketId: buyModal.id,
+
+quantity: buyQty,
+
+purchasePrice:
+buyModal.currentPrice,
+
+purchaseDate:
+new Date()
+.toISOString()
+.split("T")[0]
+
+};
+
+
+await buyStock(holding);
+
+
+}
 
 
 
+toast.success(
+`${buyQty} ${buyModal.symbol} bought successfully`
+);
 
-  window.dispatchEvent(
-    new Event("portfolioUpdated")
-  );
+
+
+window.dispatchEvent(
+new Event("portfolioUpdated")
+);
+
+
+
+setBuyModal(null);
 
 
 }
 
 catch(error){
+
+console.error(error);
+
 toast.error(
-  "Buy failed. Please try again."
+"Buy failed"
 );
 
-console.error(
-  error
-);
 }
 
 
 };
-const handleSell = async(stock)=>{
-
-  try{
 
 
-    const response = await getHoldings();
-
-    const holdings = response.data;
+const openSellModal=(stock)=>{
 
 
-    const existingStock = holdings.find(
-      item => item.marketId === stock.id
-    );
+setSellModal(stock);
+setSellQuantity(1);
 
 
-    
-    if(!existingStock){
-
-      toast.error(
-  `You don't own ${stock.symbol}`
-);
-
-      return;
-    }
+};
 
 
 
-    const remainingQuantity =
-      existingStock.quantity - 1;
+const handleSellConfirm=async()=>{
+
+
+const sellQty=Number(sellQuantity);
 
 
 
-    
-    if(remainingQuantity === 0){
+try{
 
 
-      await deleteHolding(
-        existingStock.holdingId
-      );
+const response = await getHoldings();
+
+const holdings=response.data;
 
 
-    }
-
-    
-    else{
-
-
-      const updatedHolding = {
-
-        id: existingStock.holdingId,
-
-        marketId: existingStock.marketId,
-
-        quantity: remainingQuantity,
-
-        purchasePrice:
-          existingStock.purchasePrice,
-
-        purchaseDate:
-          existingStock.purchaseDate
-
-      };
-
-
-      await updateHolding(
-        existingStock.holdingId,
-        updatedHolding
-      );
-
-
-    }
-
-
-
-    window.dispatchEvent(
-      new Event("portfolioUpdated")
-    );
-
-
-  toast.success(
- `${stock.symbol} sold successfully`
+const existingStock=holdings.find(
+item=>item.marketId===sellModal.id
 );
 
 
-  }
-  catch(error){
- toast.error(
-    "Sell failed. Please try again."
-  );
 
-  console.error(
-    "Sell failed:",
-    error
-  );
+if(!existingStock){
 
-  }
+toast.error(
+"You don't own this stock"
+);
+
+return;
+
+}
+
+
+
+if(sellQty > existingStock.quantity){
+
+toast.error(
+`Maximum quantity is ${existingStock.quantity}`
+);
+
+return;
+
+}
+
+
+
+const remaining =
+existingStock.quantity - sellQty;
+
+
+
+if(remaining===0){
+
+
+await deleteHolding(
+existingStock.holdingId
+);
+
+
+}
+
+else{
+
+
+const updatedHolding={
+
+id:existingStock.holdingId,
+
+marketId:existingStock.marketId,
+
+quantity:remaining,
+
+purchasePrice:
+existingStock.purchasePrice,
+
+purchaseDate:
+existingStock.purchaseDate
+
+};
+
+
+
+await updateHolding(
+existingStock.holdingId,
+updatedHolding
+);
+
+
+}
+
+
+
+toast.success(
+`${sellQty} ${sellModal.symbol} sold successfully`
+);
+
+
+
+window.dispatchEvent(
+new Event("portfolioUpdated")
+);
+
+
+
+setSellModal(null);
+
+
+}
+
+
+catch(error){
+
+console.error(error);
+
+toast.error(
+"Sell failed"
+);
+
+
+}
+
 
 };
 
@@ -299,7 +352,7 @@ const handleSell = async(stock)=>{
                 <div className="flex justify-center gap-2">
 
                 <button
- onClick={()=>handleBuy(stock)}
+ onClick={()=>openBuyModal(stock)}
  className="
                     bg-green-500/10
                     border border-green-500/30
@@ -318,7 +371,7 @@ const handleSell = async(stock)=>{
 
                   <button
 
-onClick={()=>handleSell(stock)}
+onClick={()=>openSellModal(stock)}
 
 className="
 bg-red-500/10
@@ -347,6 +400,266 @@ transition
         </tbody>
 
       </table>
+
+       {
+      sellModal && (
+
+        <div className="
+          theme-modal-overlay
+          fixed inset-0
+          bg-black/60
+          flex items-center justify-center
+          z-50
+        ">
+
+
+          <div className="
+            theme-modal
+            bg-[#1D1826]
+            border border-[#32293F]
+            rounded-2xl
+            p-6
+            w-96
+          ">
+
+
+            <h2 className="
+              theme-primary-text
+              text-xl
+              font-semibold
+              text-white
+            ">
+              Sell {sellModal.symbol}
+            </h2>
+
+
+
+            <p className="theme-muted text-[#A8A4B3] mt-3">
+
+              Available Quantity:
+
+              <span className="theme-primary-text text-white font-semibold ml-2">
+                {sellModal.quantity}
+              </span>
+
+            </p>
+
+
+
+            <input
+
+              type="number"
+
+              value={sellQuantity}
+
+              min="1"
+
+              max={sellModal.quantity}
+
+              onChange={(e)=>setSellQuantity(e.target.value)}
+
+              className="
+              theme-input
+              mt-5
+              w-full
+              bg-[#241C30]
+              border border-[#32293F]
+              rounded-xl
+              px-4 py-3
+              text-white
+              "
+
+            />
+
+
+
+            <div className="
+              flex
+              justify-end
+              gap-3
+              mt-6
+            ">
+
+
+              <button
+
+                onClick={()=>setSellModal(null)}
+
+                className="
+                theme-button-secondary
+                px-4 py-2
+                rounded-xl
+                bg-[#32293F]
+                text-white
+                "
+
+              >
+                Cancel
+
+              </button>
+
+
+
+              <button
+
+                onClick={handleSellConfirm}
+
+                className="
+                px-4 py-2
+                rounded-xl
+                bg-red-500
+                text-white
+                hover:bg-red-600
+                "
+
+              >
+                Confirm Sell
+
+              </button>
+
+
+            </div>
+
+
+          </div>
+
+
+        </div>
+
+      )
+    }
+
+
+    {
+buyModal && (
+
+<div className="
+fixed inset-0
+bg-black/60
+flex items-center justify-center
+z-50
+">
+
+
+<div className="
+bg-[#1D1826]
+border border-[#32293F]
+rounded-2xl
+p-6
+w-96
+">
+
+
+<h2 className="
+text-xl
+font-semibold
+text-white
+">
+
+
+</h2>
+Buy {buyModal.symbol}
+
+
+<p className="text-[#A8A4B3] mt-3">
+
+Current Quantity:
+
+<span className="text-white font-semibold ml-2">
+
+{buyModal.quantity}
+
+</span>
+
+</p>
+
+
+<input
+
+type="number"
+
+value={buyQuantity}
+
+min="1"
+
+onChange={(e)=>{
+
+setBuyQuantity(e.target.value);
+
+}}
+
+className="
+theme-input
+mt-5
+w-full
+bg-[#241C30]
+border border-[#32293F]
+rounded-xl
+px-4 py-3
+text-white
+"
+
+/>
+
+
+
+<div className="
+flex
+justify-end
+gap-3
+mt-6
+">
+
+
+<button
+
+onClick={()=>setBuyModal(null)}
+
+className="
+px-4
+py-2
+rounded-xl
+bg-[#32293F]
+text-white
+"
+
+>
+
+Cancel
+
+</button>
+
+
+
+<button
+
+onClick={handleBuyConfirm}
+
+className="
+px-4
+py-2
+rounded-xl
+bg-green-500
+text-white
+"
+
+>
+
+Confirm Buy
+
+</button>
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+)
+}
 
     </div>
   );

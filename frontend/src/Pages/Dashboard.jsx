@@ -7,8 +7,12 @@ import SectorAllocation from "../components/dashboard/SectorAllocation";
 import HoldingsTable from "../components/dashboard/HoldingTable";
 import  { useEffect, useState } from "react";
 import { getPortfolioSummary } from "../api/portfolioApi";
+import AIPortfolioAdvisor from "../components/dashboard/AIPortfolioAdvisor";
+import { getHoldings } from "../api/holdingApi";
+
 
 const Dashboard = ({ theme, onToggleTheme }) => {
+  const [holdings, setHoldings] = useState([]);
   const [summary, setSummary] = useState(null);
  
 const fetchSummary = () => {
@@ -27,6 +31,24 @@ const fetchSummary = () => {
 
 };
 
+useEffect(()=>{
+
+  getHoldings()
+  .then((response)=>{
+
+    setHoldings(response.data);
+
+  })
+  .catch((error)=>{
+
+    console.error(
+      "Error fetching holdings:",
+      error
+    );
+
+  });
+
+},[]);
 
 useEffect(() => {
 
@@ -141,6 +163,9 @@ useEffect(() => {
             <PortfolioAllocation />
             <SectorAllocation />
             </div>
+            <AIPortfolioAdvisor
+  holdings={holdings}
+/>
             <HoldingsTable />
       </div>
     </div>
