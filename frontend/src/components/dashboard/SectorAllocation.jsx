@@ -11,15 +11,23 @@ import {
 
 import { getSectorAllocation } from "../../api/portfolioApi";
 
-
 const COLORS = [
-  "#8B5CF6",
+  "#8B5CF6", 
   "#06B6D4",
-  "#22C55E",
+  "#22C55E", 
   "#F59E0B",
-  "#EF4444",
+  "#EF4444", 
+  "#EC4899", 
+  "#14B8A6", 
+  "#6366F1", 
+  "#84CC16", 
+  "#F97316", 
+  "#A855F7", 
+  "#0EA5E9", 
+  "#64748B", 
+  "#D946EF", 
+  "#EAB308"  
 ];
-
 
 const SectorAllocation = () => {
 

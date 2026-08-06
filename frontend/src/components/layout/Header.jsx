@@ -32,15 +32,7 @@ const Header = ({ theme = "dark", onToggleTheme }) => {
             )}
           </button>
 
-          <Search
-            size={20}
-            className="header-icon text-[#A8A4B3] hover:text-[#B784F7] cursor-pointer transition duration-300"
-          />
-
-          <Bell
-            size={20}
-            className="header-icon text-[#A8A4B3] hover:text-[#B784F7] cursor-pointer transition duration-300"
-          />
+         
 
           <UserCircle
             size={24}
