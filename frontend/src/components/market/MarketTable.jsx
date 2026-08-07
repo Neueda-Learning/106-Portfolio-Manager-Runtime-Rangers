@@ -31,14 +31,82 @@ const [sellQuantity, setSellQuantity] = useState(1);
 
 },[]);
 
-const openBuyModal = (stock)=>{
+const openBuyModal = async(stock)=>{
 
-setBuyModal(stock);
+try{
+
+const response = await getHoldings();
+
+const holdings = response.data;
+
+
+const holding = holdings.find(
+item => item.marketId === stock.id
+);
+
+
+
+setBuyModal({
+
+...stock,
+
+quantity: holding 
+? holding.quantity 
+: 0
+
+});
+
+
 setBuyQuantity(1);
+
+
+}
+catch(error){
+
+console.error(error);
+
+toast.error(
+"Unable to fetch quantity"
+);
+
+}
 
 };
 
+const simulateMarketMovement = () => {
 
+  setMarketData(prevData =>
+
+    prevData.map(stock => {
+
+      const randomPercent =
+        (Math.random() * 10 - 5) / 100;
+       
+
+
+      const newPrice =
+        stock.currentPrice +
+        (stock.currentPrice * randomPercent);
+
+
+      return {
+
+        ...stock,
+
+        currentPrice:
+          Number(newPrice.toFixed(2)),
+
+
+        changePercent:
+          Number((randomPercent * 100).toFixed(2))
+
+      };
+
+    })
+
+  );
+
+};
 
 const handleBuyConfirm = async()=>{
 
@@ -133,6 +201,8 @@ await buyStock(holding);
 toast.success(
 `${buyQty} ${buyModal.symbol} bought successfully`
 );
+
+simulateMarketMovement();
 
 
 
